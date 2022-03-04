@@ -23,7 +23,7 @@ public class PayBehaviorHourly implements PayBehavior
 			//System.out.println("pay "+pay);
 			//pay remaining hours with 1.5 times normal rate
 			double overtime = hourly_rate * 1.5;
-			double extra_hours = hours_worked % 40;
+			double extra_hours = hours_worked - 40;
 			//System.out.println("hourly_rate 1.5X "+overtime);
 			//System.out.println("extra hours worked "+extra_hours);
 			pay = pay + overtime * extra_hours;

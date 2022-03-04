@@ -2,6 +2,8 @@ package test_prep1;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,19 +45,14 @@ class unittest_prep1
 		salary_worker.setHours_worked(42);
 		
 		//Verify ability to pay all workers
-		double[] paytest = new double[] {1260.00,1037.5,1400.00};//anticipated values
-		assertEquals(payAll(contract_worker,hourly_worker,salary_worker),paytest); //compares 2 arrays
+		Company company = new Company();
+		Employee[] emp_arr = {contract_worker, hourly_worker, salary_worker};
+		ArrayList<Double> paytest = new ArrayList<Double>() ;//anticipated values {1260.00,1075.00,1400.00}
+		paytest.add(1260.00);
+		paytest.add(1075.00);
+		paytest.add(1400.00);
+		assertEquals(company.payAll(emp_arr),paytest); //compares 2 ArrayList<Double>
 		
-	}
-
-	//This would be run in main()
-	private double[] payAll(Employee contract_worker, Employee hourly_worker, Employee salary_worker)
-	{
-		double c = contract_worker.calcPay(contract_worker.getHourly_rate(),contract_worker.getHours_worked());
-		double h = hourly_worker.calcPay(hourly_worker.getHourly_rate(),hourly_worker.getHours_worked());
-		double s = salary_worker.calcPay(salary_worker.getHourly_rate(),salary_worker.getHours_worked());
-		double[] payroll = new double[] {c,h,s};
-		return payroll;
 	}
 
 }
