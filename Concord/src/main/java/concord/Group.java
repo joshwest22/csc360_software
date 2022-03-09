@@ -1,5 +1,6 @@
 package concord;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,9 @@ public class Group
 	String groupName;
 	Integer groupID;
 	
+	//basic role with no permissions except sendMessage
+	Role basic = new Role("basic",this,false,false,false,false);
+	
 	public Group(ArrayList<Channel> channels, HashMap<User, Role> registeredUsers, String description, URL logo,
 			String groupName, Integer groupID)
 	{
@@ -22,6 +26,24 @@ public class Group
 		this.logo = logo;
 		this.groupName = groupName;
 		this.groupID = groupID;
+	}
+	//alternate constructor
+	public Group(Integer groupID, String groupName)
+	{
+		this.channels = new ArrayList<Channel>();
+		this.registeredUsers = new HashMap<User, Role>();
+		this.description = "default description; please set me";
+		try
+		{
+			this.logo = new URL("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAAC8CAMAAAC672BgAAABGlBMVEX///9YrjnF1vPr6+vk5OSdnZ3D1POvsLHI2fTt9P7l6O/k7fzu7u7n7/rV4vd6eXx+h3tul2DKzNBgpUjc6PvS4fn5+fmWlpfR3vOJiYqgoKH1+P3CytewsrbV2d+RkZLV1dXA1Oxcr0Hy+fDExMW3t7i70uSyztabxq55unKoycaorbW8xNN8v2P6/fmqq6vKz9nI0uO7vsPV3u2zzdmnycOaxqyiyLqOv5mBuoN8uXmHvYxhrUtqs1pztWi30dKRxI611rnb6eeMxXu4267R6Mmo1Jjh8NzG47tzu1nF39HO4eiGxHCjz5yo0LGrvLuVo5mataKNn4yMr4qDo359rnV2r2rG1sCEl4GTvIWrtKeTqYt6nG69x7rFCBnUAAAEX0lEQVR4nO3a61/aVhzHcTUgsFy6UUjC1QAJNy1RRFAuYgdIrdZZq1u7dv//v7HfOQmFeNserPpazvf9pC8hD5LP63eSE+3aGgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAf0OPPE1S9Jc+xeejGNEnxZKSLkwOJZp13dgjXDcbswUaDooRaycf0Y5FXce2IqLUoBhO8qdHJJ0oDY4jzEqhGO2imniQWqQYbkyc2WAxdlVVle+hD4sFNjdW0k5akgg1eAxZTj1AlncLUdeWJMuh26gIs6EYFIOuXGNYABZG837apxixpKJHbLZSBHiosBh5uvw0k5L5rcL7SUtp+YLBYigRy7IpR+hvoxSjkNdS6XScrl9OsI9yspdGM/PbhsseJbpiOa5tKcpLn+0P9j0GGwU1xz7KqawGxWExso5Fm3LLjtH2y7JCPhpeDM1bIzkeQ8/l1NQihpH19qJRgzYcTshHg95N/BjeWHhyqraIYfCXF/5PNiq93Ik+By8Ge5Am7sfY2yksuTQdYsRQ/SXiYzHiadPc390tLiSdrBgxaCz0FeyBEo/HTTPFN6KEnrjFtiAxUv41L8h0A2U1/G2YtzcXJcY9vAUtFL4t5VtzeVeAGFve0yT+IHrImKa/U6cYW+GPsZ03H4vhB+E7srwQMQp5M/1EDL8IvagIEMPY5jE2nsJi7LVjbth3oF6M+D/EiKe1/WIyGfZ3k38Vg0ZDk9Xwv7X6MVavvMQFYqS1wHY9pFiMHRZjc4FiVJlSaXP5WVoO7tfD6U4MPhadGulUSxubi0TxVOKlT/Q5BGKUStXO+KDXq3e79XrvoFnzxoPdMMI/FmvLGHwAqp1m7/Co32+Q/tHgsN7sUI0NU1YFWCNEWolR6jTrg+Nh2TMcHR9RjWopnvJLhP4XwlJmEaNarfW6g/6ovO5hNQbd3njf/9WoLkUiIa8hZba8GKUajUV/NFy0WPeG4+Ttr/4zNWI5Yd+Bfo9RbdYPl2OxGI7hZDr3DtQjdjTs7yZeDJPWSHfQGA0DLdbPLibTWYUdlsslim0jI0aMWrNHt87hncF4czqbV1rssJwq5wuCxDgf9w4bo+BYlMtnk3d8LFqtVkLWdrbFiLE35vfOYIuzyel0zsaiNZ+9fX/O/ogiQoz2+Xuai7tr5GJKa4QdUpl9OLkcm2JMhvvb+PJoVC4H54LuF3wsKpXZtHE86J2LMRlXHy9PGsG5KL+ZnL7ja4RSnE5Go/5h7+BqS4AY15+OGnc2GHTr9B8j8+nFGW3QR/0Pn64FiJH5fHP7+/HrFaMzf6ulK9IfX/hXx7cDMWL8/Pnm5tsvS7dfTv2tlmTZf37lX327+Xp9lQl9jFcZyhFw9de8wteIHnGM5Xd0XPhj3GPY/vuYbrmZ1S8yryIve7I/mi7ds/xffXTPCAr5KzwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwP/a38wtqoLPT/bDAAAAAElFTkSuQmCC");
+		} catch (MalformedURLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.groupID = groupID;
+		this.groupName = groupName;
+		
 	}
 
 	public ArrayList<Channel> getChannels()
@@ -85,24 +107,32 @@ public class Group
 	}
 	
 	
-	public void addNewUser()
+	public void addNewUser(User user, Role role)
 	{
-		// TODO
+		//adds user to registeredUsers as key and role as value
+		registeredUsers.put(user,role);
 	}
-	public void removeUser()
+	public void removeUser(User user)
 	{
-		// TODO
+		registeredUsers.remove(user); //might need to remove by userID
 	}
-	public void getUserCount()
+	public Integer getUserCount() //return type differs from UML
 	{
-		// TODO
+		return registeredUsers.size();
 	}
-	public void inviteUser()
+	public void inviteUser(User user)
 	{
-		// TODO
+		//Directly add user with basic permissions/role
+		this.addNewUser(user, basic);
 	}
-	public void createChannel(String channelName)
+	public void createChannel(String channelName, Group myGroup)
 	{
-		// TODO
+		Channel newChannel = new Channel(channelName, myGroup);
+		channels.add(newChannel);
+	}
+	public HashMap<User,Role> viewAllMembers()
+	{
+		//allows users to see all members of a server; alias for getRegisteredUsers()
+		return registeredUsers;
 	}
 }

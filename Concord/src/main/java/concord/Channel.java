@@ -1,6 +1,7 @@
 package concord;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Channel
 {
@@ -18,6 +19,16 @@ public class Channel
 		this.isLocked = isLocked;
 		this.allowedUsers = allowedUsers;
 		this.messageLog = messageLog;
+	}
+
+	public Channel(String channelName, Group myGroup)
+	{
+		//a constructor that just assigns the channel name on creation and set everything else to defaults
+		this.channelName = channelName;
+		this.myGroup = myGroup;
+		this.isLocked = false;
+		this.allowedUsers = new ArrayList<User>();
+		this.messageLog = new ArrayList<Message>();
 	}
 
 	public String getChannelName()
@@ -72,18 +83,40 @@ public class Channel
 	
 	public void sendNewMessage(Message m)
 	{
-		// TO DO
+		//add Message to messageLog
+		messageLog.add(m);
 	}
-	public ArrayList<Message> displayAllMessages()
+	public ArrayList<Message> displayAllMessages(HashMap<Integer, User> users, Integer userID)
 	{
-		// TO DO
-		ArrayList<Message> allMsgs =
-		null;
-		return allMsgs;
+		//String strMsgs = messageLog.toString(); //leaving this in case I want to return string version of msgs
+		for (Message m : this.messageLog)
+		{
+			for (User u : users.get(userID).getBlockedUsers())
+			{
+				if (m.getSentBy().equals(u))
+				{
+					m.setText("BLOCKED TEXT FOLLOWS: "+m.getText());
+				}
+			}				
+		}
+		return getMessageLog();
+		
 	}
-	public void lockChannel(Channel channel)
+	/*
+	 * @Override public String toString() { return "Channel [channelName=" +
+	 * channelName + ", myGroup=" + myGroup + ", isLocked=" + isLocked +
+	 * ", allowedUsers=" + allowedUsers + ", messageLog=" + messageLog +
+	 * ", getMessageLog()=" + getMessageLog() + ", displayAllMessages()=" +
+	 * displayAllMessages() + "]"; }
+	 */
+
+	public void lockChannel()
 	{
-		// TO DO
+		setIsLocked(true);
+		//remove blacklisted users from allowedUsers
+		/*
+		 * for (User u : blacklist) { allowedUsers.remove(u); }
+		 */
 	}
 }
 

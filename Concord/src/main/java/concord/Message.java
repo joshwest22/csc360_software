@@ -1,18 +1,32 @@
 package concord;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+
 public class Message
 {
 	String text;
+	Timestamp timestamp;
 	Boolean isPinned = false;
-	User sentBY;
+	User sentBy;
 	Message inReplyTo;
 	
-	public Message(String text, Boolean isPinned, User sentBY, Message inReplyTo)
+	public Message(String text, Timestamp timestamp, Boolean isPinned, User sentBy, Message inReplyTo)
 	{
 		this.text = text;
+		this.timestamp = timestamp;
 		this.isPinned = isPinned;
-		this.sentBY = sentBY;
+		this.sentBy = sentBy;
 		this.inReplyTo = inReplyTo;
+	}
+	//alternate constructor
+	public Message(String msg, User user)
+	{
+		this.text = msg;
+		this.timestamp = Timestamp.from(Instant.now());
+		this.sentBy = user;
+		this.isPinned = false;
+		this.inReplyTo = null;
 	}
 
 	public String getText()
@@ -25,6 +39,16 @@ public class Message
 		this.text = text;
 	}
 
+	public Timestamp getTimestamp()
+	{
+		return timestamp;
+	}
+	
+	public void setTimestamp(Timestamp timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+	
 	public Boolean getIsPinned()
 	{
 		return isPinned;
@@ -35,14 +59,14 @@ public class Message
 		this.isPinned = isPinned;
 	}
 
-	public User getSentBY()
+	public User getSentBy()
 	{
-		return sentBY;
+		return sentBy;
 	}
 
-	public void setSentBY(User sentBY)
+	public void setSentBy(User sentBY)
 	{
-		this.sentBY = sentBY;
+		this.sentBy = sentBY;
 	}
 
 	public Message getInReplyTo()
@@ -55,13 +79,11 @@ public class Message
 		this.inReplyTo = inReplyTo;
 	}
 	
-	
 	public void isReply()
 	{
-		// TO DO
-	}
-	public void isPinned()
-	{
-		// TO DO
+		if (inReplyTo != null)
+		{
+			//TODO This is UI
+		}
 	}
 }

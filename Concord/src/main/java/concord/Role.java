@@ -73,27 +73,49 @@ public class Role
 	
 	public String kickUser(User user)
 	{
-		String kickMsg = "User has been kicked.";
-		//Add if statement or try catch if kick fails due to permissions
-		return kickMsg;
+		//check permissions
+		if (canKick)
+		{
+			//Call Group removeUser(user)
+			group.removeUser(user);
+			String kickMsg = "User has been kicked.";
+			return kickMsg;
+		}
+		else
+		{
+			String kickMsg = "You do not have permission to kick users.";
+			return kickMsg;
+		}
 	}
 	public String lockChannel(Channel channel)
 	{
+		channel.setIsLocked(true);
+		//TODO update allowed users
+		/*
+		 * ArrayList<User> uesrList = new ArrayList<User>(); for (entry :
+		 * group.registeredUsers) { userList.add(entry); }
+		 * channel.setAllowedUsers(userList);
+		 */
 		String lockMsg = "Channel has been locked.";
 		return lockMsg;
 	}
 	public String sendMessage(Message m, Channel channel)
 	{
-		String sentVerification = "Message sent.";
+		//pass along the message to the channel
+		channel.sendNewMessage(m);
+		String sentVerification = "Message "+m.getText()+" sent.";
 		return sentVerification;
 	}
 	public String leaveGroup(User user)
 	{
-		String leftNotice = user + " left the group.";
+		// user should only be the user calling this
+		group.removeUser(user);
+		String leftNotice = user.getUsername() + " left the group.";
 		return  leftNotice;
 	}
 	public String assignRole(User user, Role role)
 	{
+		group.getRegisteredUsers().put(user,role);
 		String roleMsg = "Role "+role+" has been assigned to "+user;
 		return roleMsg;
 	}
