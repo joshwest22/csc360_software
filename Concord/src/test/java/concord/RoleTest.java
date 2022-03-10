@@ -13,8 +13,8 @@ class RoleTest
 	static Role basic;
 	static Role admin;
 	static Group testGroup;
-	static User noob;
-	static User expert;
+	static Integer noob;
+	static Integer expert;
 	static URL pfp;
 	static Channel channel;
 	static ArrayList<Message> msgLog;
@@ -25,8 +25,8 @@ class RoleTest
 		pfp = new URL("http://google.images");
 		basic = new Role("basic",testGroup,false,false,false,false);
 		admin = new Role("admin",testGroup,true,true,true,true);
-		noob = new User("n008", "noob", "123", 63, pfp, "I'm new here", false, null);
-		expert = new User("Hexpert","Hector Spurt","asdfJkhlu124~",1337,pfp,"I run this place",false,null);
+		noob = new Integer("n008", "noob", "123", 63, pfp, "I'm new here", false, null);
+		expert = new Integer("Hexpert","Hector Spurt","asdfJkhlu124~",1337,pfp,"I run this place",false,null);
 		testGroup.addNewUser(noob, basic);
 		testGroup.addNewUser(expert, admin);
 		channel = new Channel("testChannel", testGroup);
@@ -81,7 +81,7 @@ class RoleTest
 	@Test
 	void testAssignRole()
 	{
-		User bill = new User("bigbill", "william", "741aaa", 70, pfp, "I am Bill. Hear me roar.", false, null);
+		Integer bill = new Integer("bigbill", "william", "741aaa", 70, pfp, "I am Bill. Hear me roar.", false, null);
 		testGroup.addNewUser(bill, basic);
 		assertEquals("basic",testGroup.getRegisteredUsers().get(bill).getRoleName());
 		admin.assignRole(bill, admin);

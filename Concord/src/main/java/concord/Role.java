@@ -71,7 +71,7 @@ public class Role
 	}
 	
 	
-	public String kickUser(User user)
+	public String kickUser(Integer user)
 	{
 		//check permissions
 		if (canKick)
@@ -87,15 +87,18 @@ public class Role
 			return kickMsg;
 		}
 	}
-	public String lockChannel(Channel channel)
+	public String lockChannel(String channelName, User user)
 	{
-		channel.setIsLocked(true);
+		user.getGroups().getChannels.get(channelName).setIsLocked(true);
 		//TODO update allowed users
 		/*
 		 * ArrayList<User> uesrList = new ArrayList<User>(); for (entry :
 		 * group.registeredUsers) { userList.add(entry); }
 		 * channel.setAllowedUsers(userList);
 		 */
+		user.getAllowedUsers().removeAll();
+		//only have user that locked channel in allowedList
+		user.getAllowedUsers().add(user);
 		String lockMsg = "Channel has been locked.";
 		return lockMsg;
 	}
@@ -106,14 +109,14 @@ public class Role
 		String sentVerification = "Message "+m.getText()+" sent.";
 		return sentVerification;
 	}
-	public String leaveGroup(User user)
+	public String leaveGroup(Integer user)
 	{
 		// user should only be the user calling this
 		group.removeUser(user);
 		String leftNotice = user.getUsername() + " left the group.";
 		return  leftNotice;
 	}
-	public String assignRole(User user, Role role)
+	public String assignRole(Integer user, Role role)
 	{
 		group.getRegisteredUsers().put(user,role);
 		String roleMsg = "Role "+role+" has been assigned to "+user;
@@ -124,4 +127,5 @@ public class Role
 		String channelCreatedMsg = "Channel "+channelName+" was created.";
 		return channelCreatedMsg;
 	}
+	//Might need a view channel
 }

@@ -13,17 +13,19 @@ import org.junit.jupiter.api.Test;
 class DatabaseSingletonTest
 {
 	URL url;
+	User josh;
+	User satan;
 	@BeforeEach
 	void setUp() throws Exception
 	{
+		url = new URL("http://google.com");
+		User josh = new User("jdubble","josh","password",42,url,"I like butterflies",false,null);
+		User satan = new User("d3vil","lucifer","hellonearth",666,url,"I hate butterflies",false,null);
 	}
 
 	@Test
 	void testCreateUser() throws MalformedURLException
 	{
-		url = new URL("http://google.com");
-		User josh = new User("jdubble","josh","password",42,url,"I like butterflies",false,null);
-		User satan = new User("d3vil","lucifer","hellonearth",666,url,"I hate butterflies",false,null);
 		ArrayList<User> blockedList = new ArrayList<User>();
 		blockedList.add(satan);
 		josh.setBlockedUsers(blockedList );
@@ -35,7 +37,6 @@ class DatabaseSingletonTest
 		assertEquals(josh.getUserBio(),"I like butterflies");
 		assertEquals(josh.getOnlineStatus(),false);
 		assertEquals(josh.getBlockedUsers(),blockedList);
-		
 	}
 
 	@Test
@@ -62,25 +63,17 @@ class DatabaseSingletonTest
 	@Test
 	void testMessageReceived()
 	{
-		fail("Did not have time to write the test");
+		messageReceived(channelName, msg, userID, groupID);
 	}
 
 	@Test
-	void testViewChannel(String channelName, Integer userID,Integer groupID, HashMap<Integer,Group> groups,HashMap<User,Integer> users)
+	void testViewChannel(String channelName, Integer userID,Integer groupID)
 	{
-		//url = new URL("http://google.com");
-		//User josh = new User("jdubble","josh","password",42,url,"I like butterflies",false,null);
-		//No blocked msgs
-		//assert actual messages = fake msgs
-		/*
-		 * for (Channel c : groups.get(groupID).channels) {
-		 * assertEquals(c.viewChannel(channelName, userID, groupID),);
-		 * 
-		 * }
-		 */
-		
-		//Useful for checking for blocked msgs
-		
+		//make new group
+		//have enemy send msgs
+		//check lenght of msg log
+		//block enemy
+		//show length changes		
 	}
 
 }

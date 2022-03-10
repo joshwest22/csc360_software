@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class MessageTest
 {		
 	static Message m;
-	static User user;
+	static Integer user;
 	@BeforeAll
 	static void setUp() throws Exception
 	{

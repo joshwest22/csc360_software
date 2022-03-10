@@ -1,17 +1,18 @@
 package concord;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DatabaseSingleton
 {
 	HashMap<Integer, Group> groups;
-	HashMap<Integer, User> users;
+	HashMap<Integer, Integer> users;
 	
 	public void createUser(String username, String realname, String password, Integer userID, URL userPic, String userBio, Boolean onlineStatus)
 	{
 		//create User and add to users HashMap
-		User user = new User(username,realname,password,userID,userPic,userBio,onlineStatus,null);
+		Integer user = new Integer(username,realname,password,userID,userPic,userBio,onlineStatus,null);
 		users.put(userID, user);
 	}
 	public void createGroup(Integer groupID, String groupName)
@@ -48,17 +49,43 @@ public class DatabaseSingleton
 			}
 		}
 	}
-	public void viewChannel(String channelName, Integer userID, Integer groupID)
+	public ArrayList<Message> viewChannel(String channelName, Integer userID, Integer groupID)
 	{
+		ArrayList<Message> emptyList = new ArrayList<Message>();
 		//check through all channels for the channel with channelName
-		for (Channel i : groups.get(groupID).channels)
+		for (Channel c : groups.get(groupID).channels)
 		{
+			
 			//call channel's displayAllMessages
-			if (i.getChannelName() == channelName)
+			if (c.getChannelName() == channelName)
 			{
-				i.displayAllMessages(users, userID);
+				ArrayList<Message> msgLog = c.getMessageLog();
+				ArrayList<Message> clearedMsgList = new ArrayList<Message>();
+				  for (Message m : msgLog)
+				  {
+					  if (!users.get(userID).getBlockedUsers().contains(m.sentBy))
+					  {
+						  clearedMsgList.add(m);
+					  }
+				  }
+				  return clearedMsgList;
 			}
 		}
+		return emptyList;
+		
+		
+	}
+	public void blockUser(Integer blockerID, Integer blockeeID)
+	{
+		users.get(blockerID).blockUser(blockeeID);
+	}
+	public void unblockUser(Integer unblockerID, Integer unblockeeID)
+	{
+		users.get(unblockerID).blockUser(unblockeeID);
+	}
+	public void lockChannel(String channelName, User user)
+	{
+		
 	}
 	
 }

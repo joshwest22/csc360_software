@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Group
 {
 	ArrayList<Channel> channels;
-	HashMap<User,Role> registeredUsers;
+	HashMap<Integer,Role> registeredUsers;
 	String description;
 	URL logo;
 	String groupName;
@@ -17,7 +17,7 @@ public class Group
 	//basic role with no permissions except sendMessage
 	Role basic = new Role("basic",this,false,false,false,false);
 	
-	public Group(ArrayList<Channel> channels, HashMap<User, Role> registeredUsers, String description, URL logo,
+	public Group(ArrayList<Channel> channels, HashMap<Integer, Role> registeredUsers, String description, URL logo,
 			String groupName, Integer groupID)
 	{
 		this.channels = channels;
@@ -31,7 +31,7 @@ public class Group
 	public Group(Integer groupID, String groupName)
 	{
 		this.channels = new ArrayList<Channel>();
-		this.registeredUsers = new HashMap<User, Role>();
+		this.registeredUsers = new HashMap<Integer, Role>();
 		this.description = "default description; please set me";
 		try
 		{
@@ -56,12 +56,12 @@ public class Group
 		this.channels = channels;
 	}
 
-	public HashMap<User, Role> getRegisteredUsers()
+	public HashMap<Integer, Role> getRegisteredUsers()
 	{
 		return registeredUsers;
 	}
 
-	public void setRegisteredUsers(HashMap<User, Role> registeredUsers)
+	public void setRegisteredUsers(HashMap<Integer, Role> registeredUsers)
 	{
 		this.registeredUsers = registeredUsers;
 	}
@@ -107,12 +107,12 @@ public class Group
 	}
 	
 	
-	public void addNewUser(User user, Role role)
+	public void addNewUser(Integer user, Role role)
 	{
 		//adds user to registeredUsers as key and role as value
 		registeredUsers.put(user,role);
 	}
-	public void removeUser(User user)
+	public void removeUser(Integer user)
 	{
 		registeredUsers.remove(user); //might need to remove by userID
 	}
@@ -120,7 +120,7 @@ public class Group
 	{
 		return registeredUsers.size();
 	}
-	public void inviteUser(User user)
+	public void inviteUser(Integer user)
 	{
 		//Directly add user with basic permissions/role
 		this.addNewUser(user, basic);
@@ -130,7 +130,7 @@ public class Group
 		Channel newChannel = new Channel(channelName, myGroup);
 		channels.add(newChannel);
 	}
-	public HashMap<User,Role> viewAllMembers()
+	public HashMap<Integer,Role> viewAllMembers()
 	{
 		//allows users to see all members of a server; alias for getRegisteredUsers()
 		return registeredUsers;

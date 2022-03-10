@@ -8,10 +8,10 @@ public class Channel
 	String channelName;
 	Group myGroup;
 	Boolean isLocked = false;
-	ArrayList<User> allowedUsers;
+	ArrayList<Integer> allowedUsers;
 	ArrayList<Message> messageLog;
 	
-	public Channel(String channelName, Group myGroup, Boolean isLocked, ArrayList<User> allowedUsers,
+	public Channel(String channelName, Group myGroup, Boolean isLocked, ArrayList<Integer> allowedUsers,
 			ArrayList<Message> messageLog)
 	{
 		this.channelName = channelName;
@@ -27,7 +27,7 @@ public class Channel
 		this.channelName = channelName;
 		this.myGroup = myGroup;
 		this.isLocked = false;
-		this.allowedUsers = new ArrayList<User>();
+		this.allowedUsers = new ArrayList<Integer>();
 		this.messageLog = new ArrayList<Message>();
 	}
 
@@ -61,12 +61,12 @@ public class Channel
 		this.isLocked = isLocked;
 	}
 
-	public ArrayList<User> getAllowedUsers()
+	public ArrayList<Integer> getAllowedUsers()
 	{
 		return allowedUsers;
 	}
 
-	public void setAllowedUsers(ArrayList<User> allowedUsers)
+	public void setAllowedUsers(ArrayList<Integer> allowedUsers)
 	{
 		this.allowedUsers = allowedUsers;
 	}
@@ -86,12 +86,12 @@ public class Channel
 		//add Message to messageLog
 		messageLog.add(m);
 	}
-	public ArrayList<Message> displayAllMessages(HashMap<Integer, User> users, Integer userID)
+	public ArrayList<Message> displayAllMessages(HashMap<Integer, Integer> users, Integer userID)
 	{
 		//String strMsgs = messageLog.toString(); //leaving this in case I want to return string version of msgs
 		for (Message m : this.messageLog)
 		{
-			for (User u : users.get(userID).getBlockedUsers())
+			for (Integer u : users.get(userID).getBlockedUsers())
 			{
 				if (m.getSentBy().equals(u))
 				{
@@ -110,7 +110,7 @@ public class Channel
 	 * displayAllMessages() + "]"; }
 	 */
 
-	public void lockChannel()
+	public void lockChannel(String channelName, User user)
 	{
 		setIsLocked(true);
 		//remove blacklisted users from allowedUsers

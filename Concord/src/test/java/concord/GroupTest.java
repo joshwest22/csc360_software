@@ -15,8 +15,8 @@ class GroupTest
 	Group group1;
 	Group group2;
 	Group group3;
-	User josh;
-	User gus;
+	Integer josh;
+	Integer gus;
 	Role adminRole;
 	Role basicRole;
 	@BeforeEach
@@ -29,8 +29,8 @@ class GroupTest
 		ArrayList<Channel> channels = new ArrayList<Channel>();
 		Channel channel1 = new Channel("channel1");
 		channels.add(channel1);
-		HashMap<User,Role> registeredUsers = new HashMap<User,Role>();
-		josh = new User("joshanator", "josh", "pass", 00, URL("https://google.com"), "bio", true,null);
+		HashMap<Integer,Role> registeredUsers = new HashMap<Integer,Role>();
+		josh = new Integer("joshanator", "josh", "pass", 00, URL("https://google.com"), "bio", true,null);
 		Role defaultRole = new Role("admin", group1, true, true, true, true);
 		registeredUsers.put(josh, defaultRole);
 		group2 = new Group(channels, registeredUsers, "cool group", URL("http://logo.com"), "group2", 2);
@@ -68,7 +68,7 @@ class GroupTest
 	void testGroupIntegerString() throws MalformedURLException
 	{
 		ArrayList<Channel> channels = new ArrayList<Channel>();
-		HashMap<User,Role> regUsers = new HashMap<User,Role>();
+		HashMap<Integer,Role> regUsers = new HashMap<Integer,Role>();
 		group1.logo = new URL("http://logo-url.com");
 		assertEquals(group1.getGroupID(),1);
 		assertEquals(group1.getGroupName(),"group1");
@@ -83,7 +83,7 @@ class GroupTest
 	void testAddNewUser()
 	{
 		group2.addNewUser(josh, adminRole);
-		HashMap<User,Role> testRegUsers = new HashMap<User,Role>();
+		HashMap<Integer,Role> testRegUsers = new HashMap<Integer,Role>();
 		testRegUsers.put(josh,adminRole);
 		assertEquals(group2.getRegisteredUsers().get(josh),testRegUsers.get(josh));
 		group2.addNewUser(gus, adminRole);
@@ -95,7 +95,7 @@ class GroupTest
 	void testRemoveUser() //this is also how a user leaves
 	{
 		group2.addNewUser(josh, adminRole);
-		HashMap<User,Role> testRegUsers = new HashMap<User,Role>();
+		HashMap<Integer,Role> testRegUsers = new HashMap<Integer,Role>();
 		testRegUsers.put(josh,adminRole);
 		group2.addNewUser(gus, adminRole);
 		testRegUsers.put(gus, adminRole);
@@ -106,7 +106,7 @@ class GroupTest
 	@Test
 	void testGetUserCount()
 	{
-		HashMap<User,Role> testRegUsers = new HashMap<User,Role>();
+		HashMap<Integer,Role> testRegUsers = new HashMap<Integer,Role>();
 		//assertEquals(group3.getUserCount(),0); //null exception
 		group3.addNewUser(gus, adminRole);
 		testRegUsers.put(gus,adminRole);
@@ -131,7 +131,7 @@ class GroupTest
 	void testCreateChannel()
 	{
 		group1.addNewUser(josh, adminRole);
-		ArrayList<User> allowedUsers = new ArrayList<User>();
+		ArrayList<Integer> allowedUsers = new ArrayList<Integer>();
 		allowedUsers.add(josh);
 		//ArrayList<Message> log = new ArrayList<Message>();
 		//ArrayList<Message> anotherLog = new ArrayList<Message>();

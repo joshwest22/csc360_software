@@ -28,7 +28,7 @@ class ChannelTest
 	@Test
 	void testSendNewMessage()
 	{
-		User lexie = new User("boss12", "lexie", "lexierulz7", 247, null, "im a boss", false, null);
+		Integer lexie = new Integer("boss12", "lexie", "lexierulz7", 247, null, "im a boss", false, null);
 		ArrayList<Message> mLog = new ArrayList<Message>();
 		Message m = new Message("hi",lexie);
 		mLog.add(m);
