@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.lang.Integer;
 class DatabaseSingletonTest
@@ -23,11 +22,13 @@ class DatabaseSingletonTest
 	static void setUp() throws Exception
 	{
 		url = new URL("http://google.com");
-		ArrayList<Integer> blockedUserIDs = new ArrayList<Integer>();
-		User josh = new User("jdubble","josh","password",42,url,"I like butterflies",false,blockedUserIDs);
-		User overlord = new User("OVLawd","owen","overwatch22",555,url,"As above...",false,blockedUserIDs);
-		User satan = new User("d3vil","lucifer","hellonearth",666,url,"I hate butterflies",false,blockedUserIDs);
-		HashMap<Integer,User> users = new HashMap<Integer,User>();
+		ArrayList<Integer> j = new ArrayList<Integer>();
+		ArrayList<Integer> o = new ArrayList<Integer>();
+		ArrayList<Integer> s = new ArrayList<Integer>();
+		josh = new User("jdubble","josh","password",42,url,"I like butterflies",false);
+		overlord = new User("OVLawd","owen","overwatch22",555,url,"As above...",false);
+		satan = new User("d3vil","lucifer","hellonearth",666,url,"I hate butterflies",false);
+		users = new HashMap<Integer,User>();
 		users.put(josh.getUserID(), josh);
 		users.put(overlord.getUserID(), overlord);
 		users.put(satan.getUserID(), satan);
@@ -46,7 +47,7 @@ class DatabaseSingletonTest
 		assertEquals(josh.getUserPic(),url);
 		assertEquals(josh.getUserBio(),"I like butterflies");
 		assertEquals(josh.getOnlineStatus(),false);
-		assertEquals(josh.getBlockedUsers(),blockedList);
+		assertEquals(josh.getBlockedUserIDs(),blockedList);
 		//test getUser()
 		//assertEquals(josh,getUser(42));
 	}
@@ -79,12 +80,13 @@ class DatabaseSingletonTest
 //	}
 
 	@Test
-	void testViewChannel(Integer userID,Integer groupID)
+	void testViewChannel()
 	{
 		//make new group
 		
 		Group chgroup = new Group(48,"testCreateChannelGroup");
 		Role admin = new Role("admin",chgroup , true, true, true, true);
+		chgroup.registeredUsers.put(overlord,admin);
 		chgroup.addNewUser(overlord, josh, admin);
 		chgroup.addNewUser(overlord,satan, admin);
 		//have satan send msgs
@@ -94,11 +96,16 @@ class DatabaseSingletonTest
 		//test messageReceived
 		//chgroup.channels.get(0).displayAllMessages(userID);
 		//check length of msg log
-		assertEquals(chgroup.getChannels().get(0).getMessageLog().size(),1);
+		Channel channel1 = chgroup.getChannels().get(0);
+		int channelSize = channel1.getMessageLog().size();
+		assertEquals(channelSize,1);
 		//block satan
 		josh.blockUser(satan.getUserID());
-		//show length changes
-		assertEquals(chgroup.getChannels().get(0).getMessageLog().size(),0);
+		//show length doesnt change
+		Message secondMsg = new Message("Hell is really hot.",666);
+		admin.sendMessage(secondMsg, channel1); //should not send bc blocked
+		assertEquals(channel1.getMessageLog().size(),2);
+		assertEquals(josh.getBlockedUserIDs().get(0),satan.getUserID());
 	}
 
 }

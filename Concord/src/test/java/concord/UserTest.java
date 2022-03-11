@@ -80,7 +80,7 @@ class UserTest
 		
 		testblockList.add(satan.getUserID());
 		jim.blockUser(satan.getUserID());
-		assertEquals(jim.getBlockedUsers(),blockList); //check if blocked list matches
+		assertEquals(jim.getBlockedUserIDs(),blockList); //check if blocked list matches
 	}
 	
 	@Test 
@@ -93,11 +93,11 @@ class UserTest
 		
 		blockList.add(satan.getUserID());
 		john.blockUser(satan.getUserID());
-		assertEquals(john.getBlockedUsers(),blockList); //check if blocked list matches
+		assertEquals(john.getBlockedUserIDs(),blockList); //check if blocked list matches
 		//unblock
 		john.unblockUser(satan.getUserID());
 		blockList.remove(satan.getUserID());
-		assertEquals(john.getBlockedUsers(),blockList);
+		assertEquals(john.getBlockedUserIDs(),blockList);
 	}
 
 }

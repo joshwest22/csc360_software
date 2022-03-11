@@ -12,7 +12,7 @@ public class DatabaseSingleton
 	public void createUser(String username, String realname, String password, Integer userID, URL userPic, String userBio, Boolean onlineStatus)
 	{
 		//create User and add to users HashMap
-		User user = new User(username,realname,password,userID,userPic,userBio,onlineStatus,null);
+		User user = new User(username,realname,password,userID,userPic,userBio,onlineStatus);
 		users.put(userID, user);
 	}
 	public void createGroup(Integer groupID, String groupName)
@@ -61,7 +61,7 @@ public class DatabaseSingleton
 				ArrayList<Message> clearedMsgList = new ArrayList<Message>();
 				  for (Message m : msgLog)
 				  {
-					  if (!users.get(userID).getBlockedUsers().contains(m.sentByUserID))
+					  if (!users.get(userID).getBlockedUserIDs().contains(m.sentByUserID))
 					  {
 						  clearedMsgList.add(m);
 					  }

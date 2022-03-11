@@ -26,8 +26,10 @@ class RoleTest
 		pfp = new URL("http://google.images");
 		basic = new Role("basic",testGroup,false,false,false,false);
 		admin = new Role("admin",testGroup,true,true,true,true);
-		noob = new User("n008", "noob", "123", 63, pfp, "I'm new here", false, null);
-		expert = new User("Hexpert","Hector Spurt","asdfJkhlu124~",1337,pfp,"I run this place",false,null);
+		overlord = new User("OVLad", "owen", "pass123", 567, pfp, "bio", false);
+		testGroup.registeredUsers.put(overlord, admin);
+		noob = new User("n008", "noob", "123", 63, pfp, "I'm new here", false);
+		expert = new User("Hexpert","Hector Spurt","asdfJkhlu124~",1337,pfp,"I run this place",false);
 		testGroup.addNewUser(overlord,noob, basic);
 		testGroup.addNewUser(overlord,expert, admin);
 		channel = new Channel("testChannel", testGroup);
@@ -49,8 +51,8 @@ class RoleTest
 	@Test
 	void testKickUser()
 	{
-		assertEquals(basic.kickUser(expert.getUserID()),"You do not have permission to kick users.");
-		assertEquals(admin.kickUser(noob.getUserID()),"User has been kicked.");
+		assertEquals(basic.kickUser(expert),"You do not have permission to kick users.");
+		assertEquals(admin.kickUser(noob),"User has been kicked.");
 	}
 
 	@Test
@@ -75,18 +77,18 @@ class RoleTest
 	void testLeaveGroup()
 	{
 		//leaving is allowed for any user of any permission, but if a user calls it for themselves
-		assertEquals(basic.leaveGroup(noob.getUserID(),basic.getGroup().getGroupID()),"n008 left the group.");
-		assertEquals(admin.leaveGroup(expert.getUserID(),admin.getGroup().getGroupID()),"Hexpert left the group.");
+		assertEquals(basic.leaveGroup(noob,basic.getGroup().getGroupID()),"n008 left the group.");
+		assertEquals(admin.leaveGroup(expert,admin.getGroup().getGroupID()),"Hexpert left the group.");
 	}
 
 	@Test
 	void testAssignRole()
 	{
 		ArrayList<Integer> allowedList = new ArrayList<Integer>();
-		User bill = new User("bigbill", "william", "741aaa", 70, pfp, "I am Bill. Hear me roar.", false, allowedList);
+		User bill = new User("bigbill", "william", "741aaa", 70, pfp, "I am Bill. Hear me roar.", false);
 		testGroup.addNewUser(overlord,bill, basic);
 		assertEquals("basic",testGroup.getRegisteredUsers().get(bill).getRoleName());
-		admin.assignRole(bill.getUserID(), admin);
+		admin.assignRole(bill, admin);
 		assertEquals("admin",testGroup.getRegisteredUsers().get(bill).getRoleName());
 	}
 

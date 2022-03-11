@@ -12,10 +12,10 @@ public class User
 	private URL userPic;
 	private String userBio;
 	private Boolean onlineStatus;
-	private ArrayList<Integer> blockedUserIDs;
+	private ArrayList<Integer> blockedUserIDs = new ArrayList<Integer>();
 	
 	public User(String username, String realname, String password, Integer userID, URL userPic, String userBio,
-			Boolean onlineStatus, ArrayList<Integer> blockedUsers)
+			Boolean onlineStatus)
 	{
 		this.username = username;
 		this.realname = realname;
@@ -24,7 +24,6 @@ public class User
 		this.userPic = userPic;
 		this.userBio = userBio;
 		this.onlineStatus = onlineStatus;
-		this.blockedUserIDs = blockedUsers;
 	}
 	
 	public String getUsername()
@@ -83,7 +82,7 @@ public class User
 	{
 		this.onlineStatus = onlineStatus;
 	}
-	public ArrayList<Integer> getBlockedUsers()
+	public ArrayList<Integer> getBlockedUserIDs()
 	{
 		return blockedUserIDs;
 	}
