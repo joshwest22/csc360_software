@@ -87,30 +87,8 @@ public class Channel
 	}
 	public ArrayList<Message> displayAllMessages(Integer userID)
 	{
-		//String strMsgs = messageLog.toString(); //leaving this in case I want to return string version of msgs
-		//for every message
-		for (Message m : this.messageLog)
-		{
-			//look through users on channel
-			for (Integer uID : this.allowedUsers)
-			{
-				//some sort of blocking here
-//				if (m.getSentBy().equals(uID))
-//				{
-//					m.setText("BLOCKED TEXT FOLLOWS: "+m.getText());
-//				}
-			}				
-		}
 		return getMessageLog();
-		
 	}
-	/*
-	 * @Override public String toString() { return "Channel [channelName=" +
-	 * channelName + ", myGroup=" + myGroup + ", isLocked=" + isLocked +
-	 * ", allowedUsers=" + allowedUsers + ", messageLog=" + messageLog +
-	 * ", getMessageLog()=" + getMessageLog() + ", displayAllMessages()=" +
-	 * displayAllMessages() + "]"; }
-	 */
 
 	public void lockChannel(String channelName, Integer userID)
 	{

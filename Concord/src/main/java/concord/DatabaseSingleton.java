@@ -20,6 +20,7 @@ public class DatabaseSingleton
 		Group group = new Group(groupID, groupName);
 		groups.put(groupID, group);
 	}
+	@SuppressWarnings("unlikely-arg-type")
 	public void createChannel(String channelName, Integer userID, Integer groupID)
 	{
 		//check user contains userID
@@ -34,6 +35,7 @@ public class DatabaseSingleton
 			}
 		}
 	}
+	@SuppressWarnings("unlikely-arg-type")
 	public void messageReceived(String channelName, String msg, Integer userID, Integer groupID)
 	{
 		//package message in Message and send to role and then to messageLog

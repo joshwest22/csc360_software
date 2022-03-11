@@ -84,7 +84,6 @@ class RoleTest
 	@Test
 	void testAssignRole()
 	{
-		ArrayList<Integer> allowedList = new ArrayList<Integer>();
 		User bill = new User("bigbill", "william", "741aaa", 70, pfp, "I am Bill. Hear me roar.", false);
 		testGroup.addNewUser(overlord,bill, basic);
 		assertEquals("basic",testGroup.getRegisteredUsers().get(bill).getRoleName());

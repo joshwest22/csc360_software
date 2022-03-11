@@ -22,9 +22,6 @@ class DatabaseSingletonTest
 	static void setUp() throws Exception
 	{
 		url = new URL("http://google.com");
-		ArrayList<Integer> j = new ArrayList<Integer>();
-		ArrayList<Integer> o = new ArrayList<Integer>();
-		ArrayList<Integer> s = new ArrayList<Integer>();
 		josh = new User("jdubble","josh","password",42,url,"I like butterflies",false);
 		overlord = new User("OVLawd","owen","overwatch22",555,url,"As above...",false);
 		satan = new User("d3vil","lucifer","hellonearth",666,url,"I hate butterflies",false);
@@ -48,8 +45,6 @@ class DatabaseSingletonTest
 		assertEquals(josh.getUserBio(),"I like butterflies");
 		assertEquals(josh.getOnlineStatus(),false);
 		assertEquals(josh.getBlockedUserIDs(),blockedList);
-		//test getUser()
-		//assertEquals(josh,getUser(42));
 	}
 
 	@Test

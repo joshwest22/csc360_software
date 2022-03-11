@@ -28,7 +28,7 @@ class UserTest
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
+		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false);
 		assertEquals(john.getUsername(),"johnny129");
 		assertEquals(john.getRealname(),"john");
 		assertEquals(john.getPassword(),"johnboss921!");
@@ -50,7 +50,7 @@ class UserTest
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
+		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false);
 		assertEquals(john.getUsername(),"johnny129");
 	}
 
@@ -65,7 +65,7 @@ class UserTest
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
+		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false);
 		john.setUsername("johnny130");
 		assertEquals(john.getUsername(),"johnny130");
 	}
@@ -74,8 +74,8 @@ class UserTest
 	void testBlockUser()
 	{
 		ArrayList<Integer> blockList = new ArrayList<Integer>();
-		User jim = new User("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false,blockList);
-		User satan = new User("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false,null);
+		User jim = new User("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false);
+		User satan = new User("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false);
 		ArrayList<Integer> testblockList = new ArrayList<Integer>();
 		
 		testblockList.add(satan.getUserID());
@@ -87,9 +87,8 @@ class UserTest
 	void testUnblockUser()
 	{
 		ArrayList<Integer> blockList = new ArrayList<Integer>();
-		ArrayList<Integer> testblockList = new ArrayList<Integer>();
-		User john = new User("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false,blockList);
-		User satan = new User("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false,testblockList);
+		User john = new User("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false);
+		User satan = new User("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false);
 		
 		blockList.add(satan.getUserID());
 		john.blockUser(satan.getUserID());

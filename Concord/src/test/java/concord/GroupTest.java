@@ -32,10 +32,8 @@ class GroupTest
 		Channel channel1 = new Channel("channel1",group1);
 		channels.add(channel1);
 		HashMap<User,Role> registeredUsers = new HashMap<User,Role>();
-		ArrayList<Integer> jblockedIDs = new ArrayList<Integer>();
-		ArrayList<Integer> oblockedIDs = new ArrayList<Integer>();
-		josh = new User("joshanator", "josh", "pass", 00, url, "bio", true,jblockedIDs);
-		overlord = new User("overlord","bill","xxxyyyzzz",123,url,"bio",true,oblockedIDs);
+		josh = new User("joshanator", "josh", "pass", 00, url, "bio", true);
+		overlord = new User("overlord","bill","xxxyyyzzz",123,url,"bio",true);
 		Role adminRole = new Role("admin", group1, true, true, true, true);
 		registeredUsers.put(josh, adminRole);
 		registeredUsers.put(overlord, adminRole);
