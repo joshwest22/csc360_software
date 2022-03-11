@@ -13,8 +13,9 @@ class RoleTest
 	static Role basic;
 	static Role admin;
 	static Group testGroup;
-	static Integer noob;
-	static Integer expert;
+	static User noob;
+	static User expert;
+	static User overlord;
 	static URL pfp;
 	static Channel channel;
 	static ArrayList<Message> msgLog;
@@ -25,10 +26,10 @@ class RoleTest
 		pfp = new URL("http://google.images");
 		basic = new Role("basic",testGroup,false,false,false,false);
 		admin = new Role("admin",testGroup,true,true,true,true);
-		noob = new Integer("n008", "noob", "123", 63, pfp, "I'm new here", false, null);
-		expert = new Integer("Hexpert","Hector Spurt","asdfJkhlu124~",1337,pfp,"I run this place",false,null);
-		testGroup.addNewUser(noob, basic);
-		testGroup.addNewUser(expert, admin);
+		noob = new User("n008", "noob", "123", 63, pfp, "I'm new here", false, null);
+		expert = new User("Hexpert","Hector Spurt","asdfJkhlu124~",1337,pfp,"I run this place",false,null);
+		testGroup.addNewUser(overlord,noob, basic);
+		testGroup.addNewUser(overlord,expert, admin);
 		channel = new Channel("testChannel", testGroup);
 		msgLog = new ArrayList<Message>();
 		channel.setMessageLog(msgLog);
@@ -48,8 +49,8 @@ class RoleTest
 	@Test
 	void testKickUser()
 	{
-		assertEquals(basic.kickUser(expert),"You do not have permission to kick users.");
-		assertEquals(admin.kickUser(noob),"User has been kicked.");
+		assertEquals(basic.kickUser(expert.getUserID()),"You do not have permission to kick users.");
+		assertEquals(admin.kickUser(noob.getUserID()),"User has been kicked.");
 	}
 
 	@Test
@@ -58,14 +59,14 @@ class RoleTest
 		
 		channel.setIsLocked(false);
 		assertEquals(false,channel.getIsLocked());
-		channel.lockChannel();
+		channel.lockChannel(channel.getChannelName(),expert.getUserID());
 		assertEquals(true,channel.getIsLocked());
 	}
 
 	@Test
 	void testSendMessage()
 	{
-		Message m = new Message("hello", noob);
+		Message m = new Message("hello", noob.getUserID());
 		basic.sendMessage(m, channel);
 		assertEquals("hello",channel.messageLog.get(0).getText());
 	}
@@ -74,17 +75,18 @@ class RoleTest
 	void testLeaveGroup()
 	{
 		//leaving is allowed for any user of any permission, but if a user calls it for themselves
-		assertEquals(basic.leaveGroup(noob),"n008 left the group.");
-		assertEquals(admin.leaveGroup(expert),"Hexpert left the group.");
+		assertEquals(basic.leaveGroup(noob.getUserID(),basic.getGroup().getGroupID()),"n008 left the group.");
+		assertEquals(admin.leaveGroup(expert.getUserID(),admin.getGroup().getGroupID()),"Hexpert left the group.");
 	}
 
 	@Test
 	void testAssignRole()
 	{
-		Integer bill = new Integer("bigbill", "william", "741aaa", 70, pfp, "I am Bill. Hear me roar.", false, null);
-		testGroup.addNewUser(bill, basic);
+		ArrayList<Integer> allowedList = new ArrayList<Integer>();
+		User bill = new User("bigbill", "william", "741aaa", 70, pfp, "I am Bill. Hear me roar.", false, allowedList);
+		testGroup.addNewUser(overlord,bill, basic);
 		assertEquals("basic",testGroup.getRegisteredUsers().get(bill).getRoleName());
-		admin.assignRole(bill, admin);
+		admin.assignRole(bill.getUserID(), admin);
 		assertEquals("admin",testGroup.getRegisteredUsers().get(bill).getRoleName());
 	}
 

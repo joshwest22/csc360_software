@@ -3,7 +3,7 @@ package concord;
 public class Role
 {
 	private String roleName;
-	private Group group;
+	private Group myGroup;
 	private Boolean canKick;
 	private Boolean canLockChannel;
 	private Boolean canAssignRole;
@@ -14,7 +14,7 @@ public class Role
 	{
 		super();
 		this.roleName = roleName;
-		this.group = group;
+		this.myGroup = group;
 		this.canKick = canKick;
 		this.canLockChannel = canLockChannel;
 		this.canAssignRole = canAssignRole;
@@ -31,11 +31,11 @@ public class Role
 	}
 	public Group getGroup()
 	{
-		return group;
+		return myGroup;
 	}
 	public void setGroup(Group group)
 	{
-		this.group = group;
+		this.myGroup = group;
 	}
 	public Boolean getCanKick()
 	{
@@ -71,13 +71,13 @@ public class Role
 	}
 	
 	
-	public String kickUser(Integer user)
+	public String kickUser(User user)
 	{
 		//check permissions
 		if (canKick)
 		{
 			//Call Group removeUser(user)
-			group.removeUser(user);
+			myGroup.removeUser(user);
 			String kickMsg = "User has been kicked.";
 			return kickMsg;
 		}
@@ -87,20 +87,25 @@ public class Role
 			return kickMsg;
 		}
 	}
-	public String lockChannel(String channelName, User user)
+	public String lockChannel(String channelName, Integer userID)
 	{
-		user.getGroups().getChannels.get(channelName).setIsLocked(true);
-		//TODO update allowed users
-		/*
-		 * ArrayList<User> uesrList = new ArrayList<User>(); for (entry :
-		 * group.registeredUsers) { userList.add(entry); }
-		 * channel.setAllowedUsers(userList);
-		 */
-		user.getAllowedUsers().removeAll();
-		//only have user that locked channel in allowedList
-		user.getAllowedUsers().add(user);
-		String lockMsg = "Channel has been locked.";
-		return lockMsg;
+		//for every channel
+		for (Channel c : myGroup.channels)
+		{
+			//make sure this is correct channel
+			if (c.getChannelName() == channelName)
+			{
+				c.setIsLocked(true); 
+				//reset allowed users
+				c.allowedUsers.clear();
+				//only have user that locked channel in allowedList
+				c.getAllowedUsers().add(userID);
+				String lockMsg = "Channel has been locked.";
+				return lockMsg;
+			}
+		}
+		//channel was not found
+		return "Channel name not found.";
 	}
 	public String sendMessage(Message m, Channel channel)
 	{
@@ -109,16 +114,16 @@ public class Role
 		String sentVerification = "Message "+m.getText()+" sent.";
 		return sentVerification;
 	}
-	public String leaveGroup(Integer user)
+	public String leaveGroup(User user, Integer groupID)
 	{
 		// user should only be the user calling this
-		group.removeUser(user);
+		myGroup.removeUser(user);
 		String leftNotice = user.getUsername() + " left the group.";
 		return  leftNotice;
 	}
-	public String assignRole(Integer user, Role role)
+	public String assignRole(User user, Role role)
 	{
-		group.getRegisteredUsers().put(user,role);
+		myGroup.getRegisteredUsers().put(user,role);
 		String roleMsg = "Role "+role+" has been assigned to "+user;
 		return roleMsg;
 	}

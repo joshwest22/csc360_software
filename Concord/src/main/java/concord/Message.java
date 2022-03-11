@@ -8,7 +8,7 @@ public class Message
 	String text;
 	Timestamp timestamp;
 	Boolean isPinned = false;
-	Integer sentBy;
+	Integer sentByUserID;
 	Message inReplyTo;
 	
 	public Message(String text, Timestamp timestamp, Boolean isPinned, Integer sentBy, Message inReplyTo)
@@ -16,15 +16,15 @@ public class Message
 		this.text = text;
 		this.timestamp = timestamp;
 		this.isPinned = isPinned;
-		this.sentBy = sentBy;
+		this.sentByUserID = sentBy;
 		this.inReplyTo = inReplyTo;
 	}
 	//alternate constructor
-	public Message(String msg, Integer user)
+	public Message(String msg, Integer userID)
 	{
 		this.text = msg;
 		this.timestamp = Timestamp.from(Instant.now());
-		this.sentBy = user;
+		this.sentByUserID = userID;
 		this.isPinned = false;
 		this.inReplyTo = null;
 	}
@@ -61,12 +61,12 @@ public class Message
 
 	public Integer getSentBy()
 	{
-		return sentBy;
+		return sentByUserID;
 	}
 
 	public void setSentBy(Integer sentBY)
 	{
-		this.sentBy = sentBY;
+		this.sentByUserID = sentBY;
 	}
 
 	public Message getInReplyTo()

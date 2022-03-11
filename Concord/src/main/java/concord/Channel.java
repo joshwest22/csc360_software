@@ -86,17 +86,20 @@ public class Channel
 		//add Message to messageLog
 		messageLog.add(m);
 	}
-	public ArrayList<Message> displayAllMessages(HashMap<Integer, Integer> users, Integer userID)
+	public ArrayList<Message> displayAllMessages(Integer userID)
 	{
 		//String strMsgs = messageLog.toString(); //leaving this in case I want to return string version of msgs
+		//for every message
 		for (Message m : this.messageLog)
 		{
-			for (Integer u : users.get(userID).getBlockedUsers())
+			//look through users on channel
+			for (Integer uID : this.allowedUsers)
 			{
-				if (m.getSentBy().equals(u))
-				{
-					m.setText("BLOCKED TEXT FOLLOWS: "+m.getText());
-				}
+				//some sort of blocking here
+//				if (m.getSentBy().equals(uID))
+//				{
+//					m.setText("BLOCKED TEXT FOLLOWS: "+m.getText());
+//				}
 			}				
 		}
 		return getMessageLog();
@@ -110,13 +113,19 @@ public class Channel
 	 * displayAllMessages() + "]"; }
 	 */
 
-	public void lockChannel(String channelName, User user)
+	public void lockChannel(String channelName, Integer userID)
 	{
-		setIsLocked(true);
-		//remove blacklisted users from allowedUsers
-		/*
-		 * for (User u : blacklist) { allowedUsers.remove(u); }
-		 */
+		if (this.getChannelName() == channelName)
+		{
+			setIsLocked(true);
+			//remove blacklisted users from allowedUsers
+			for (Integer uID : allowedUsers) 
+			{ 
+				allowedUsers.remove(uID); 			
+			}
+			allowedUsers.add(userID);			 
+		}
+		
 	}
 }
 

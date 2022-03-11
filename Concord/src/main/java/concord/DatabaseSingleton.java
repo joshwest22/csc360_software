@@ -7,12 +7,12 @@ import java.util.HashMap;
 public class DatabaseSingleton
 {
 	HashMap<Integer, Group> groups;
-	HashMap<Integer, Integer> users;
+	HashMap<Integer, User> users;
 	
 	public void createUser(String username, String realname, String password, Integer userID, URL userPic, String userBio, Boolean onlineStatus)
 	{
 		//create User and add to users HashMap
-		Integer user = new Integer(username,realname,password,userID,userPic,userBio,onlineStatus,null);
+		User user = new User(username,realname,password,userID,userPic,userBio,onlineStatus,null);
 		users.put(userID, user);
 	}
 	public void createGroup(Integer groupID, String groupName)
@@ -20,7 +20,6 @@ public class DatabaseSingleton
 		Group group = new Group(groupID, groupName);
 		groups.put(groupID, group);
 	}
-	@SuppressWarnings("unlikely-arg-type")
 	public void createChannel(String channelName, Integer userID, Integer groupID)
 	{
 		//check user contains userID
@@ -35,11 +34,10 @@ public class DatabaseSingleton
 			}
 		}
 	}
-	@SuppressWarnings("unlikely-arg-type")
 	public void messageReceived(String channelName, String msg, Integer userID, Integer groupID)
 	{
 		//package message in Message and send to role and then to messageLog
-		Message m = new Message(msg,users.get(userID));
+		Message m = new Message(msg,userID);
 		Role r = groups.get(groupID).getRegisteredUsers().get(userID);
 		for(Channel ch : r.getGroup().channels)
 		{
@@ -63,7 +61,7 @@ public class DatabaseSingleton
 				ArrayList<Message> clearedMsgList = new ArrayList<Message>();
 				  for (Message m : msgLog)
 				  {
-					  if (!users.get(userID).getBlockedUsers().contains(m.sentBy))
+					  if (!users.get(userID).getBlockedUsers().contains(m.sentByUserID))
 					  {
 						  clearedMsgList.add(m);
 					  }
@@ -86,6 +84,11 @@ public class DatabaseSingleton
 	public void lockChannel(String channelName, User user)
 	{
 		
+	}
+	public User getUser(Integer userID)
+	{
+		User user = users.get(userID);
+		return user;
 	}
 	
 }

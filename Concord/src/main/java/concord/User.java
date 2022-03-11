@@ -12,10 +12,10 @@ public class User
 	private URL userPic;
 	private String userBio;
 	private Boolean onlineStatus;
-	private ArrayList<User> blockedUsers;
+	private ArrayList<Integer> blockedUserIDs;
 	
 	public User(String username, String realname, String password, Integer userID, URL userPic, String userBio,
-			Boolean onlineStatus, ArrayList<User> blockedUsers)
+			Boolean onlineStatus, ArrayList<Integer> blockedUsers)
 	{
 		this.username = username;
 		this.realname = realname;
@@ -24,7 +24,7 @@ public class User
 		this.userPic = userPic;
 		this.userBio = userBio;
 		this.onlineStatus = onlineStatus;
-		this.blockedUsers = blockedUsers;
+		this.blockedUserIDs = blockedUsers;
 	}
 	
 	public String getUsername()
@@ -83,21 +83,26 @@ public class User
 	{
 		this.onlineStatus = onlineStatus;
 	}
-	public ArrayList<User> getBlockedUsers()
+	public ArrayList<Integer> getBlockedUsers()
 	{
-		return blockedUsers;
+		return blockedUserIDs;
 	}
-	public void setBlockedUsers(ArrayList<User> blockedUsers)
+	public void setBlockedUsers(ArrayList<Integer> blockedUsers)
 	{
-		this.blockedUsers = blockedUsers;
+		this.blockedUserIDs = blockedUsers;
 	}
-	public void blockUser(User blockee)
+	public void blockUser(Integer blockeeID)
 	{
-		blockedUsers.add(blockee);
+		blockedUserIDs.add(blockeeID);
 	}
-	public void unblockUser(User unblockee)
+	public void unblockUser(Integer unblockeeID)
 	{
-		blockedUsers.remove(unblockee);
+		blockedUserIDs.remove(unblockeeID);
+	}
+	public Message sendMessage(String m)
+	{
+		Message newM = new Message(m, userID);
+		return newM;
 	}
 	
 }

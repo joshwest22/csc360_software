@@ -11,7 +11,8 @@ class ChannelTest
 {
 	Group group = new Group(653,"testingGroup");
 	ArrayList<Message> msgLog = new ArrayList<Message>();
-	Channel channel = new Channel("main", group, false, null, msgLog);
+	ArrayList<Integer> allowedUsers = new ArrayList<Integer>();
+	Channel channel = new Channel("main", group, false, allowedUsers, msgLog);
 	@BeforeAll
 	static void setUp() throws Exception
 	{
@@ -28,9 +29,9 @@ class ChannelTest
 	@Test
 	void testSendNewMessage()
 	{
-		Integer lexie = new Integer("boss12", "lexie", "lexierulz7", 247, null, "im a boss", false, null);
+		User lexie = new User("boss12", "lexie", "lexierulz7", 247, null, "im a boss", false, null);
 		ArrayList<Message> mLog = new ArrayList<Message>();
-		Message m = new Message("hi",lexie);
+		Message m = new Message("hi",lexie.getUserID());
 		mLog.add(m);
 		channel.sendNewMessage(m);
 		assertEquals(mLog, channel.getMessageLog());
@@ -46,9 +47,11 @@ class ChannelTest
 	@Test
 	void testLockChannel()
 	{
+		ArrayList<Integer> blockList = new ArrayList<Integer>();
+		User jess = new User("boss22", "jess", "jessisbest22", 222, null, "im a boss", false, blockList);
 		channel.setIsLocked(false);
 		assertEquals(false,channel.getIsLocked());
-		channel.lockChannel();
+		channel.lockChannel(channel.getChannelName(), jess.getUserID());
 		assertEquals(true,channel.getIsLocked());
 	}
 

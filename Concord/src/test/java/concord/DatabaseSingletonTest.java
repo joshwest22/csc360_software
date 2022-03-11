@@ -7,27 +7,37 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import java.lang.Integer;
 class DatabaseSingletonTest
 {
-	URL url;
-	User josh;
-	User satan;
-	@BeforeEach
-	void setUp() throws Exception
+	static URL url;
+	static User overlord;
+	static User josh;
+	static User satan;
+	static Role basic;
+	static HashMap<Integer,User> users;
+	@BeforeAll
+	static void setUp() throws Exception
 	{
 		url = new URL("http://google.com");
-		User josh = new User("jdubble","josh","password",42,url,"I like butterflies",false,null);
-		User satan = new User("d3vil","lucifer","hellonearth",666,url,"I hate butterflies",false,null);
+		ArrayList<Integer> blockedUserIDs = new ArrayList<Integer>();
+		User josh = new User("jdubble","josh","password",42,url,"I like butterflies",false,blockedUserIDs);
+		User overlord = new User("OVLawd","owen","overwatch22",555,url,"As above...",false,blockedUserIDs);
+		User satan = new User("d3vil","lucifer","hellonearth",666,url,"I hate butterflies",false,blockedUserIDs);
+		HashMap<Integer,User> users = new HashMap<Integer,User>();
+		users.put(josh.getUserID(), josh);
+		users.put(overlord.getUserID(), overlord);
+		users.put(satan.getUserID(), satan);
 	}
 
 	@Test
 	void testCreateUser() throws MalformedURLException
 	{
-		ArrayList<User> blockedList = new ArrayList<User>();
-		blockedList.add(satan);
+		ArrayList<Integer> blockedList = new ArrayList<Integer>();
+		blockedList.add(satan.getUserID());
 		josh.setBlockedUsers(blockedList );
 		assertEquals(josh.getUsername(),"jdubble");
 		assertEquals(josh.getRealname(),"josh");
@@ -37,6 +47,8 @@ class DatabaseSingletonTest
 		assertEquals(josh.getUserBio(),"I like butterflies");
 		assertEquals(josh.getOnlineStatus(),false);
 		assertEquals(josh.getBlockedUsers(),blockedList);
+		//test getUser()
+		//assertEquals(josh,getUser(42));
 	}
 
 	@Test
@@ -60,20 +72,33 @@ class DatabaseSingletonTest
 		assertEquals(chan.getChannelName(),"testChannel1");
 	}
 
-	@Test
-	void testMessageReceived()
-	{
-		messageReceived(channelName, msg, userID, groupID);
-	}
+//	@Test
+//	void testMessageReceived()
+//	{
+//		messageReceived(channelName, msg, userID, groupID);
+//	}
 
 	@Test
-	void testViewChannel(String channelName, Integer userID,Integer groupID)
+	void testViewChannel(Integer userID,Integer groupID)
 	{
 		//make new group
-		//have enemy send msgs
-		//check lenght of msg log
-		//block enemy
-		//show length changes		
+		
+		Group chgroup = new Group(48,"testCreateChannelGroup");
+		Role admin = new Role("admin",chgroup , true, true, true, true);
+		chgroup.addNewUser(overlord, josh, admin);
+		chgroup.addNewUser(overlord,satan, admin);
+		//have satan send msgs
+		chgroup.createChannel("channel1", chgroup);
+		Message m = new Message("Hell is freezing over.",666);
+		admin.sendMessage(m,chgroup.getChannels().get(0));
+		//test messageReceived
+		//chgroup.channels.get(0).displayAllMessages(userID);
+		//check length of msg log
+		assertEquals(chgroup.getChannels().get(0).getMessageLog().size(),1);
+		//block satan
+		josh.blockUser(satan.getUserID());
+		//show length changes
+		assertEquals(chgroup.getChannels().get(0).getMessageLog().size(),0);
 	}
 
 }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Group
 {
 	ArrayList<Channel> channels;
-	HashMap<Integer,Role> registeredUsers;
+	HashMap<User,Role> registeredUsers;
 	String description;
 	URL logo;
 	String groupName;
@@ -17,7 +17,7 @@ public class Group
 	//basic role with no permissions except sendMessage
 	Role basic = new Role("basic",this,false,false,false,false);
 	
-	public Group(ArrayList<Channel> channels, HashMap<Integer, Role> registeredUsers, String description, URL logo,
+	public Group(ArrayList<Channel> channels, HashMap<User, Role> registeredUsers, String description, URL logo,
 			String groupName, Integer groupID)
 	{
 		this.channels = channels;
@@ -31,7 +31,7 @@ public class Group
 	public Group(Integer groupID, String groupName)
 	{
 		this.channels = new ArrayList<Channel>();
-		this.registeredUsers = new HashMap<Integer, Role>();
+		this.registeredUsers = new HashMap<User, Role>();
 		this.description = "default description; please set me";
 		try
 		{
@@ -56,12 +56,12 @@ public class Group
 		this.channels = channels;
 	}
 
-	public HashMap<Integer, Role> getRegisteredUsers()
+	public HashMap<User, Role> getRegisteredUsers()
 	{
 		return registeredUsers;
 	}
 
-	public void setRegisteredUsers(HashMap<Integer, Role> registeredUsers)
+	public void setRegisteredUsers(HashMap<User, Role> registeredUsers)
 	{
 		this.registeredUsers = registeredUsers;
 	}
@@ -107,30 +107,34 @@ public class Group
 	}
 	
 	
-	public void addNewUser(Integer user, Role role)
+	public void addNewUser(User adder, User addee, Role role)
 	{
 		//adds user to registeredUsers as key and role as value
-		registeredUsers.put(user,role);
+		if (registeredUsers.get(adder).getCanAssignRole() == true)
+		{
+			registeredUsers.put(addee,registeredUsers.get(addee));
+		}
+		
 	}
-	public void removeUser(Integer user)
+	public void removeUser(User user)
 	{
-		registeredUsers.remove(user); //might need to remove by userID
+		registeredUsers.remove(user); 
 	}
-	public Integer getUserCount() //return type differs from UML
+	public Integer getUserCount() 
 	{
 		return registeredUsers.size();
 	}
-	public void inviteUser(Integer user)
+	public void inviteUser(User inviter, User invitee, Role role)
 	{
 		//Directly add user with basic permissions/role
-		this.addNewUser(user, basic);
+		this.addNewUser(inviter, invitee, role);
 	}
 	public void createChannel(String channelName, Group myGroup)
 	{
 		Channel newChannel = new Channel(channelName, myGroup);
 		channels.add(newChannel);
 	}
-	public HashMap<Integer,Role> viewAllMembers()
+	public HashMap<User,Role> viewAllMembers()
 	{
 		//allows users to see all members of a server; alias for getRegisteredUsers()
 		return registeredUsers;

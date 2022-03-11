@@ -15,10 +15,12 @@ class GroupTest
 	Group group1;
 	Group group2;
 	Group group3;
-	Integer josh;
-	Integer gus;
+	User josh;
+	User gus;
+	User overlord;
 	Role adminRole;
 	Role basicRole;
+	URL url;
 	@BeforeEach
 	void setUp() throws Exception //something not set up correctly here; causing null pointer
 	{
@@ -27,12 +29,16 @@ class GroupTest
 		
 		//test that all parameters of group were assigned correctly using long constructor
 		ArrayList<Channel> channels = new ArrayList<Channel>();
-		Channel channel1 = new Channel("channel1");
+		Channel channel1 = new Channel("channel1",group1);
 		channels.add(channel1);
-		HashMap<Integer,Role> registeredUsers = new HashMap<Integer,Role>();
-		josh = new Integer("joshanator", "josh", "pass", 00, URL("https://google.com"), "bio", true,null);
-		Role defaultRole = new Role("admin", group1, true, true, true, true);
-		registeredUsers.put(josh, defaultRole);
+		HashMap<User,Role> registeredUsers = new HashMap<User,Role>();
+		ArrayList<Integer> jblockedIDs = new ArrayList<Integer>();
+		ArrayList<Integer> oblockedIDs = new ArrayList<Integer>();
+		josh = new User("joshanator", "josh", "pass", 00, url, "bio", true,jblockedIDs);
+		overlord = new User("overlord","bill","xxxyyyzzz",123,url,"bio",true,oblockedIDs);
+		Role adminRole = new Role("admin", group1, true, true, true, true);
+		registeredUsers.put(josh, adminRole);
+		registeredUsers.put(overlord, adminRole);
 		group2 = new Group(channels, registeredUsers, "cool group", URL("http://logo.com"), "group2", 2);
 		
 		group3 = new Group(3,"group3");
@@ -82,22 +88,23 @@ class GroupTest
 	@Test
 	void testAddNewUser()
 	{
-		group2.addNewUser(josh, adminRole);
-		HashMap<Integer,Role> testRegUsers = new HashMap<Integer,Role>();
+		HashMap<User,Role> testRegUsers = new HashMap<User,Role>();
+		group2.addNewUser(overlord, josh, adminRole); //size = 1
 		testRegUsers.put(josh,adminRole);
-		assertEquals(group2.getRegisteredUsers().get(josh),testRegUsers.get(josh));
-		group2.addNewUser(gus, adminRole);
+		//assertEquals(group2.getRegisteredUsers().get(josh).getRoleName(),testRegUsers.get(josh).getRoleName());
+		assertEquals(group2.getRegisteredUsers().size(),testRegUsers.size());
+		group2.addNewUser(overlord,gus, adminRole); // size = 2
 		testRegUsers.put(gus, adminRole);
-		assertEquals(group2.getRegisteredUsers(),testRegUsers);		
+		assertEquals(group2.getRegisteredUsers().size(),testRegUsers.size());		
 	}
 
 	@Test
 	void testRemoveUser() //this is also how a user leaves
 	{
-		group2.addNewUser(josh, adminRole);
-		HashMap<Integer,Role> testRegUsers = new HashMap<Integer,Role>();
+		group2.addNewUser(overlord,josh, adminRole);
+		HashMap<User,Role> testRegUsers = new HashMap<User,Role>();
 		testRegUsers.put(josh,adminRole);
-		group2.addNewUser(gus, adminRole);
+		group2.addNewUser(overlord,gus, adminRole);
 		testRegUsers.put(gus, adminRole);
 		testRegUsers.remove(josh);
 		assertEquals(group2.getRegisteredUsers().get(josh),testRegUsers.get(josh)); // might need to compare users
@@ -106,15 +113,15 @@ class GroupTest
 	@Test
 	void testGetUserCount()
 	{
-		HashMap<Integer,Role> testRegUsers = new HashMap<Integer,Role>();
+		HashMap<User,Role> testRegUsers = new HashMap<User,Role>();
 		//assertEquals(group3.getUserCount(),0); //null exception
-		group3.addNewUser(gus, adminRole);
+		group3.addNewUser(overlord,gus, adminRole);
 		testRegUsers.put(gus,adminRole);
 		assertEquals(group3.getUserCount(),1);
-		group3.addNewUser(josh, adminRole);
+		group3.addNewUser(overlord,josh, adminRole);
 		testRegUsers.put(josh,adminRole);
 		assertEquals(group3.getUserCount(),2);
-		group3.addNewUser(gus, adminRole);
+		group3.addNewUser(overlord,gus, adminRole);
 		testRegUsers.put(josh,adminRole);
 		assertEquals(group3.getUserCount(),2); //count should not change; user already exists
 	}
@@ -123,45 +130,44 @@ class GroupTest
 	void testInviteUser()
 	{
 		assertEquals(group2.getRegisteredUsers().containsKey(gus),false);
-		group2.inviteUser(gus);
+		group2.inviteUser(overlord, gus, basicRole);
 		assertEquals(group2.getRegisteredUsers().containsKey(gus),true);
 	}
 
 	@Test
 	void testCreateChannel()
 	{
-		group1.addNewUser(josh, adminRole);
-		ArrayList<Integer> allowedUsers = new ArrayList<Integer>();
-		allowedUsers.add(josh);
-		//ArrayList<Message> log = new ArrayList<Message>();
-		//ArrayList<Message> anotherLog = new ArrayList<Message>();
-		group1.createChannel("testChannel");
-		//Channel channel = new Channel("testChannel",group1,false,allowedUsers,log);
-		/*
-		 * assertEquals(channel.getChannelName(),"testChannel");
-		 * assertEquals(channel.getMyGroup(),group1);
-		 * assertEquals(channel.getIsLocked(),false);
-		 * assertEquals(channel.getAllowedUsers(),allowedUsers);
-		 * assertEquals(channel.getMessageLog(),log);
-		 */
+		group1.addNewUser(overlord,josh,adminRole);
+		ArrayList<Integer> allowedUserIDs = new ArrayList<Integer>();
+		allowedUserIDs.add(josh.getUserID());
+		ArrayList<Message> log = new ArrayList<Message>();
+		
+		group1.createChannel("testChannel",group1);
+		
+		  assertEquals(group1.getChannels().get(0).getChannelName(),"testChannel");
+		  assertEquals(group1.getChannels().get(0).getMyGroup(),group1);
+		  assertEquals(group1.getChannels().get(0).getIsLocked(),false);
+		  assertEquals(group1.getChannels().get(0).getAllowedUsers(),allowedUserIDs);
+		  assertEquals(group1.getChannels().get(0).getMessageLog(),log);
+		 
 		//creating a second channel
-		group1.createChannel("testAnotherChannel");
-		//Channel anotherChannel = new Channel("testAnotherChannel",group1,false,allowedUsers,anotherLog);
-		/*
-		 * assertEquals(anotherChannel.getChannelName(),"testAnotherChannel");
-		 * assertEquals(anotherChannel.getMyGroup(),group1);
-		 * assertEquals(anotherChannel.getIsLocked(),false);
-		 * assertEquals(anotherChannel.getAllowedUsers(),allowedUsers);
-		 * assertEquals(anotherChannel.getMessageLog(),anotherLog);
-		 */
+		ArrayList<Message> anotherLog = new ArrayList<Message>();
+		group1.createChannel("testAnotherChannel",group1);
+		
+		  assertEquals(group1.getChannels().get(1).getChannelName(),"testAnotherChannel");
+		  assertEquals(group1.getChannels().get(1).getMyGroup(),group1);
+		  assertEquals(group1.getChannels().get(1).getIsLocked(),false);
+		  assertEquals(group1.getChannels().get(1).getAllowedUsers(),allowedUserIDs);
+		  assertEquals(group1.getChannels().get(1).getMessageLog(),anotherLog);
+		 
 		//make sure both channels are in the group
 		assertEquals(group1.getChannels().get(0).getChannelName(),"testChannel");
 		assertEquals(group1.getChannels().get(1).getChannelName(),"testAnotherChannel");
 		
 		//test that a user can send a message in both channels
-		group2.createChannel("anotherChannel");
-		Message msg0 = new Message("Message0",josh);
-		Message msg1 = new Message("Message1",josh);
+		group2.createChannel("anotherChannel",group2);
+		Message msg0 = new Message("Message0",josh.getUserID());
+		Message msg1 = new Message("Message1",josh.getUserID());
 		group2.getRegisteredUsers().get(josh).sendMessage(msg0, group2.getChannels().get(0));
 		group2.getRegisteredUsers().get(josh).sendMessage(msg1, group2.getChannels().get(1));
 		//check if the message is in the channel and message text matches text sent

@@ -28,7 +28,7 @@ class UserTest
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Integer john = new Integer("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
+		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
 		assertEquals(john.getUsername(),"johnny129");
 		assertEquals(john.getRealname(),"john");
 		assertEquals(john.getPassword(),"johnboss921!");
@@ -50,7 +50,7 @@ class UserTest
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Integer john = new Integer("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
+		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
 		assertEquals(john.getUsername(),"johnny129");
 	}
 
@@ -65,34 +65,38 @@ class UserTest
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Integer john = new Integer("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
+		User john = new User("johnny129", "john", "johnboss921!", 11, url, "witty comment", false,null);
 		john.setUsername("johnny130");
 		assertEquals(john.getUsername(),"johnny130");
 	}
 	
 	@Test 
-	void testBlockUser(Integer blockee)
+	void testBlockUser()
 	{
-		Integer jim = new Integer("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false,null);
-		Integer satan = new Integer("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false,null);
 		ArrayList<Integer> blockList = new ArrayList<Integer>();
-		blockList.add(satan);
-		jim.blockUser(satan);
+		User jim = new User("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false,blockList);
+		User satan = new User("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false,null);
+		ArrayList<Integer> testblockList = new ArrayList<Integer>();
+		
+		testblockList.add(satan.getUserID());
+		jim.blockUser(satan.getUserID());
 		assertEquals(jim.getBlockedUsers(),blockList); //check if blocked list matches
 	}
 	
 	@Test 
-	void testUnblockUser(Integer blockee)
+	void testUnblockUser()
 	{
-		Integer john = new Integer("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false,null);
-		Integer satan = new Integer("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false,null);
 		ArrayList<Integer> blockList = new ArrayList<Integer>();
-		blockList.add(satan);
-		john.blockUser(satan);
+		ArrayList<Integer> testblockList = new ArrayList<Integer>();
+		User john = new User("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false,blockList);
+		User satan = new User("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false,testblockList);
+		
+		blockList.add(satan.getUserID());
+		john.blockUser(satan.getUserID());
 		assertEquals(john.getBlockedUsers(),blockList); //check if blocked list matches
 		//unblock
-		john.unblockUser(satan);
-		blockList.remove(satan);
+		john.unblockUser(satan.getUserID());
+		blockList.remove(satan.getUserID());
 		assertEquals(john.getBlockedUsers(),blockList);
 	}
 
