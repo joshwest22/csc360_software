@@ -78,12 +78,4 @@ public class Message
 	{
 		this.inReplyTo = inReplyTo;
 	}
-	
-	public void isReply()
-	{
-		if (inReplyTo != null)
-		{
-			//TODO This is UI
-		}
-	}
 }

@@ -73,14 +73,13 @@ class UserTest
 	@Test 
 	void testBlockUser()
 	{
-		ArrayList<Integer> blockList = new ArrayList<Integer>();
 		User jim = new User("jimmy129", "jim", "jimbo10", 10, url, "slim jim", false);
 		User satan = new User("d3vil", "lucifer", "badboy99", 666, url, "angry comment", false);
 		ArrayList<Integer> testblockList = new ArrayList<Integer>();
 		
 		testblockList.add(satan.getUserID());
 		jim.blockUser(satan.getUserID());
-		assertEquals(jim.getBlockedUserIDs(),blockList); //check if blocked list matches
+		assertEquals(jim.getBlockedUserIDs(),testblockList); //check if blocked list matches
 	}
 	
 	@Test 

@@ -22,24 +22,28 @@ class GroupTest
 	Role basicRole;
 	URL url;
 	@BeforeEach
-	void setUp() throws Exception //something not set up correctly here; causing null pointer
+	void setUp() throws Exception
 	{
 		//test that all parameters of group were assigned correctly using short Group constructor
 		group1 = new Group(1,"group1");
 		
-		//test that all parameters of group were assigned correctly using long constructor
+		
 		ArrayList<Channel> channels = new ArrayList<Channel>();
 		Channel channel1 = new Channel("channel1",group1);
 		channels.add(channel1);
 		HashMap<User,Role> registeredUsers = new HashMap<User,Role>();
 		josh = new User("joshanator", "josh", "pass", 00, url, "bio", true);
+		gus = new User("crow", "gus", "5678", 02, url, "gustav", true);
 		overlord = new User("overlord","bill","xxxyyyzzz",123,url,"bio",true);
 		Role adminRole = new Role("admin", group1, true, true, true, true);
 		registeredUsers.put(josh, adminRole);
 		registeredUsers.put(overlord, adminRole);
+		group1.registeredUsers.put(overlord, adminRole);
+		//test that all parameters of group were assigned correctly using long constructor
 		group2 = new Group(channels, registeredUsers, "cool group", URL("http://logo.com"), "group2", 2);
-		
+		//create another group for testing purposes
 		group3 = new Group(3,"group3");
+		group3.registeredUsers.put(overlord, adminRole);
 		
 }
 
@@ -72,28 +76,30 @@ class GroupTest
 	void testGroupIntegerString() throws MalformedURLException
 	{
 		ArrayList<Channel> channels = new ArrayList<Channel>();
-		HashMap<Integer,Role> regUsers = new HashMap<Integer,Role>();
+		HashMap<User,Role> regUsers = new HashMap<User,Role>();
+		regUsers.put(overlord, adminRole);
 		group1.logo = new URL("http://logo-url.com");
 		assertEquals(group1.getGroupID(),1);
 		assertEquals(group1.getGroupName(),"group1");
 		assertEquals(group1.getDescription(),"default description; please set me");
 		assertEquals(group1.getChannels(),channels);
-		assertEquals(group1.getRegisteredUsers(),regUsers);
+		assertEquals(group1.getRegisteredUsers().size(),regUsers.size());
 		assertEquals(group1.getLogo().getHost(),"logo-url.com");
-		assertEquals(group1.getUserCount(),0); 
+		assertEquals(group1.getUserCount(),regUsers.size()); 
 	}
 
 	@Test
 	void testAddNewUser()
 	{
 		HashMap<User,Role> testRegUsers = new HashMap<User,Role>();
-		group2.addNewUser(overlord, josh, adminRole); //size = 1
+		testRegUsers.put(overlord, adminRole);
+		group1.addNewUser(overlord, josh, adminRole); //size = 1
 		testRegUsers.put(josh,adminRole);
-		//assertEquals(group2.getRegisteredUsers().get(josh).getRoleName(),testRegUsers.get(josh).getRoleName());
-		assertEquals(group2.getRegisteredUsers().size(),testRegUsers.size());
-		group2.addNewUser(overlord,gus, adminRole); // size = 2
+		//assertEquals(group1.getRegisteredUsers().get(josh).getRoleName(),testRegUsers.get(josh).getRoleName());
+		assertEquals(group1.getRegisteredUsers().size(),testRegUsers.size());
+		group1.addNewUser(overlord,gus, adminRole); // size = 2
 		testRegUsers.put(gus, adminRole);
-		assertEquals(group2.getRegisteredUsers().size(),testRegUsers.size());		
+		assertEquals(group1.getRegisteredUsers().size(),testRegUsers.size());		
 	}
 
 	@Test
@@ -112,16 +118,16 @@ class GroupTest
 	void testGetUserCount()
 	{
 		HashMap<User,Role> testRegUsers = new HashMap<User,Role>();
-		//assertEquals(group3.getUserCount(),0); //null exception
-		group3.addNewUser(overlord,gus, adminRole);
+		testRegUsers.put(overlord, adminRole);
+		group3.addNewUser(overlord,gus,adminRole);
 		testRegUsers.put(gus,adminRole);
-		assertEquals(group3.getUserCount(),1);
-		group3.addNewUser(overlord,josh, adminRole);
+		assertEquals(group3.getUserCount(),testRegUsers.size());
+		group3.addNewUser(overlord,josh,adminRole);
 		testRegUsers.put(josh,adminRole);
-		assertEquals(group3.getUserCount(),2);
-		group3.addNewUser(overlord,gus, adminRole);
+		assertEquals(group3.getUserCount(),testRegUsers.size());
+		group3.addNewUser(overlord,gus,adminRole);
 		testRegUsers.put(josh,adminRole);
-		assertEquals(group3.getUserCount(),2); //count should not change; user already exists
+		assertEquals(group3.getUserCount(),testRegUsers.size()); //count should not change; user already exists
 	}
 
 	@Test
@@ -137,7 +143,7 @@ class GroupTest
 	{
 		group1.addNewUser(overlord,josh,adminRole);
 		ArrayList<Integer> allowedUserIDs = new ArrayList<Integer>();
-		allowedUserIDs.add(josh.getUserID());
+		//allowedUserIDs.add(josh.getUserID());
 		ArrayList<Message> log = new ArrayList<Message>();
 		
 		group1.createChannel("testChannel",group1);

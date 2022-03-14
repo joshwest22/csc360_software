@@ -29,10 +29,4 @@ class MessageTest
 		assertEquals(m.getSentBy(),user);
 		assertEquals(m.getInReplyTo(),null);
 	}
-
-	@Test
-	void testIsReply()
-	{
-		fail("Not yet implemented");
-	}
 }
