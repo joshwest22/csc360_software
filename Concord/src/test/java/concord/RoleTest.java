@@ -63,6 +63,11 @@ class RoleTest
 		assertEquals(false,channel.getIsLocked());
 		channel.lockChannel(channel.getChannelName(),expert.getUserID());
 		assertEquals(true,channel.getIsLocked());
+		//test when no permission
+		channel.setIsLocked(false);
+		assertEquals(false,channel.getIsLocked());
+		channel.lockChannel(channel.getChannelName(),noob.getUserID());
+		assertEquals(true,channel.getIsLocked());
 	}
 
 	@Test
@@ -87,7 +92,16 @@ class RoleTest
 		User bill = new User("bigbill", "william", "741aaa", 70, pfp, "I am Bill. Hear me roar.", false);
 		testGroup.addNewUser(overlord,bill, basic);
 		assertEquals("basic",testGroup.getRegisteredUsers().get(bill).getRoleName());
-		admin.assignRole(bill, admin);
+		//overlord assigns bill from basic to admin
+		testGroup.registeredUsers.get(overlord).assignRole(bill, admin);
+		String billRoleName = testGroup.getRegisteredUsers().get(bill).getRoleName(); 
+		assertEquals("admin",billRoleName);
+		//test when no permission to assign role
+		User joe = new User("namoth12","joe","qwertyuiop",1217,pfp,"Everybody knows joe's mother; Joe Mama.",false);
+		testGroup.addNewUser(overlord, joe, basic);
+		//user with basic role attempts to assign
+		assertEquals("Role assignment failed. basic does not have permission to assign roles.",testGroup.registeredUsers.get(joe).assignRole(bill, basic));
+		//role assignment should fail and bill should have the role he had before
 		assertEquals("admin",testGroup.getRegisteredUsers().get(bill).getRoleName());
 	}
 

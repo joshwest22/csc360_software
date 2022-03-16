@@ -104,7 +104,6 @@ public class Role
 				return lockMsg;
 			}
 		}
-		//channel was not found
 		return "Channel name not found.";
 	}
 	public String sendMessage(Message m, Channel channel)
@@ -121,11 +120,20 @@ public class Role
 		String leftNotice = user.getUsername() + " left the group.";
 		return  leftNotice;
 	}
-	public String assignRole(User user, Role role)
+	public String assignRole(User userAssigned, Role newRole)
 	{
-		myGroup.getRegisteredUsers().put(user,role);
-		String roleMsg = "Role "+role+" has been assigned to "+user;
-		return roleMsg;
+		//does user have permission to assign role
+		if (this.canAssignRole)
+		{
+			myGroup.getRegisteredUsers().put(userAssigned,newRole);
+			String roleMsg = "Role "+newRole.getRoleName()+" has been assigned to "+userAssigned;
+			return roleMsg;
+		}
+		else
+		{
+			return "Role assignment failed. "+newRole.getRoleName()+" does not have permission to assign roles.";
+		}
+		
 	}
 	public String createChannel(String channelName)
 	{

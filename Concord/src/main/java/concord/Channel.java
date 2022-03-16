@@ -96,10 +96,8 @@ public class Channel
 		{
 			setIsLocked(true);
 			//remove blacklisted users from allowedUsers
-			for (Integer uID : allowedUsers) 
-			{ 
-				allowedUsers.remove(uID); 			
-			}
+			allowedUsers.clear();
+			//add only the user who created the locked channel
 			allowedUsers.add(userID);			 
 		}
 		
