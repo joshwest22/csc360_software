@@ -4,10 +4,40 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DatabaseSingleton
+public class Database
 {
 	HashMap<Integer, Group> groups;
 	HashMap<Integer, User> users;
+	//alternate constructor
+	public Database(HashMap<Integer, Group> groups, HashMap<Integer, User> users)
+	{
+		this.groups = groups;
+		this.users = users;
+	}
+	public Database()
+	{
+		HashMap<Integer, Group> groups = new HashMap<Integer, Group>();
+		HashMap<Integer, User> users = new HashMap<Integer, User>();
+		this.groups = groups;
+		this.users = users;
+	}
+	
+	public HashMap<Integer, Group> getGroups()
+	{
+		return groups;
+	}
+	public void setGroups(HashMap<Integer, Group> groups)
+	{
+		this.groups = groups;
+	}
+	public HashMap<Integer, User> getUsers()
+	{
+		return users;
+	}
+	public void setUsers(HashMap<Integer, User> users)
+	{
+		this.users = users;
+	}
 	
 	public void createUser(String username, String realname, String password, Integer userID, URL userPic, String userBio, Boolean onlineStatus)
 	{
@@ -18,16 +48,17 @@ public class DatabaseSingleton
 	public void createGroup(Integer groupID, String groupName)
 	{
 		Group group = new Group(groupID, groupName);
+		HashMap<User,Role> regUsers = new HashMap<User,Role>();
+		group.registeredUsers = regUsers;
 		groups.put(groupID, group);
 	}
-	@SuppressWarnings("unlikely-arg-type")
 	public void createChannel(String channelName, Integer userID, Integer groupID)
 	{
 		//check user contains userID
 		if (users.containsKey(userID))
 		{
 			//check user's role through group's registeredUsers
-			Boolean allowed = groups.get(groupID).getRegisteredUsers().get(userID).getCanCreateChannel();
+			Boolean allowed = this.getRole(groupID, userID).getCanCreateChannel();
 			if (allowed)
 			{
 				//call Group's createChannel()
@@ -72,8 +103,6 @@ public class DatabaseSingleton
 			}
 		}
 		return emptyList;
-		
-		
 	}
 	public void blockUser(Integer blockerID, Integer blockeeID)
 	{
@@ -81,16 +110,21 @@ public class DatabaseSingleton
 	}
 	public void unblockUser(Integer unblockerID, Integer unblockeeID)
 	{
-		users.get(unblockerID).blockUser(unblockeeID);
+		users.get(unblockerID).unblockUser(unblockeeID);
 	}
-	public void lockChannel(String channelName, User user)
-	{
-		
-	}
+//	public void lockChannel(String channelName, User user)
+//	{
+//		
+//	}
 	public User getUser(Integer userID)
 	{
 		User user = users.get(userID);
 		return user;
+	}
+	public Role getRole(Integer groupID, Integer userID)
+	{
+		Role role = groups.get(groupID).getRegisteredUsers().get(users.get(userID));
+		return role;
 	}
 	
 }

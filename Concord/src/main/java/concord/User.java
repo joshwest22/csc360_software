@@ -24,6 +24,7 @@ public class User
 		this.userPic = userPic;
 		this.userBio = userBio;
 		this.onlineStatus = onlineStatus;
+		this.blockedUserIDs = new ArrayList<Integer>();
 	}
 	
 	public String getUsername()

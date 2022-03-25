@@ -16,6 +16,8 @@ public class Group
 	
 	//basic role with no permissions except sendMessage
 	Role basic = new Role("basic",this,false,false,false,false);
+	//admin role with all permissions
+	Role admin = new Role("admin",this,true,true,true,true);
 	
 	public Group(ArrayList<Channel> channels, HashMap<User, Role> registeredUsers, String description, URL logo,
 			String groupName, Integer groupID)
@@ -109,12 +111,12 @@ public class Group
 	}
 	
 	
-	public void addNewUser(User adder, User addee, Role role)
+	public void addNewUser(User adder, User addee, Role addeeRole)
 	{
 		//adds user to registeredUsers as key and role as value
 		if (registeredUsers.get(adder).getCanAssignRole() == true)
 		{
-			registeredUsers.put(addee,role);
+			registeredUsers.put(addee,addeeRole);
 		}
 		
 	}
