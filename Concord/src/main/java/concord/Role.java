@@ -137,8 +137,16 @@ public class Role
 	}
 	public String createChannel(String channelName)
 	{
-		String channelCreatedMsg = "Channel "+channelName+" was created.";
-		return channelCreatedMsg;
+		if (this.canCreateChannel)
+		{
+			this.myGroup.createChannel(channelName, myGroup);
+			return "Channel "+channelName+" was created.";
+		}
+		else
+		{
+			return "Channel creation failed. "+this.getRoleName()+" does not have permission to create channels.";
+		}
+		
 	}
 	//Might need a view channel
 }

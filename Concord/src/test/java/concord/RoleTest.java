@@ -61,11 +61,13 @@ class RoleTest
 		
 		channel.setIsLocked(false);
 		assertEquals(false,channel.getIsLocked());
+		//admin.lockChannel(channel.getChannelName(), expert.getUserID()); //TODO
 		channel.lockChannel(channel.getChannelName(),expert.getUserID());
 		assertEquals(true,channel.getIsLocked());
 		//test when no permission
 		channel.setIsLocked(false);
 		assertEquals(false,channel.getIsLocked());
+		//admin.lockChannel(channel.getChannelName(), noob.getUserID()); //TODO
 		channel.lockChannel(channel.getChannelName(),noob.getUserID());
 		assertEquals(true,channel.getIsLocked());
 	}
@@ -103,6 +105,14 @@ class RoleTest
 		assertEquals("Role assignment failed. basic does not have permission to assign roles.",testGroup.registeredUsers.get(joe).assignRole(bill, basic));
 		//role assignment should fail and bill should have the role he had before
 		assertEquals("admin",testGroup.getRegisteredUsers().get(bill).getRoleName());
+	}
+	@Test
+	void testCreateChannel()
+	{
+		int originalSize = admin.getGroup().getChannels().size();
+		admin.createChannel("testChannelBestChannel");
+		assertEquals(originalSize + 1,admin.getGroup().getChannels().size());
+		assertEquals("testChannelBestChannel",admin.getGroup().getChannels().get(0).getChannelName());
 	}
 
 }

@@ -82,11 +82,9 @@ public class Database
 	}
 	public ArrayList<Message> viewChannel(String channelName, Integer userID, Integer groupID)
 	{
-		ArrayList<Message> emptyList = new ArrayList<Message>();
 		//check through all channels for the channel with channelName
 		for (Channel c : groups.get(groupID).channels)
 		{
-			
 			//call channel's displayAllMessages
 			if (c.getChannelName() == channelName)
 			{
@@ -94,7 +92,8 @@ public class Database
 				ArrayList<Message> clearedMsgList = new ArrayList<Message>();
 				  for (Message m : msgLog)
 				  {
-					  if (!users.get(userID).getBlockedUserIDs().contains(m.sentByUserID))
+					  //if message not sent by blocked user, add it to clearedMsgList
+					  if (!getUser(userID).getBlockedUserIDs().contains(m.sentByUserID))
 					  {
 						  clearedMsgList.add(m);
 					  }
@@ -102,6 +101,7 @@ public class Database
 				  return clearedMsgList;
 			}
 		}
+		ArrayList<Message> emptyList = new ArrayList<Message>();
 		return emptyList;
 	}
 	public void blockUser(Integer blockerID, Integer blockeeID)

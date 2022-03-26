@@ -106,6 +106,7 @@ class DatabaseTest
 		Message m = new Message("Hell is freezing over.",666);
 		chgroup1.admin.sendMessage(m,chgroup1.getChannels().get(0));
 		//test messageReceived
+		//db.messageReceived(rolename, rolename, null, null);
 		//chgroup.channels.get(0).displayAllMessages(userID);
 		//check length of msg log
 		Channel channel1 = chgroup1.getChannels().get(0);
@@ -126,7 +127,9 @@ class DatabaseTest
 		int blockedListSize = overlord.getBlockedUserIDs().size();
 		db.unblockUser(overlord.getUserID(), satan.getUserID());
 		assertEquals(blockedListSize - 1,overlord.getBlockedUserIDs().size());
-
+		//view channel
+		ArrayList<Message> msgs = db.viewChannel(chgroup1.getChannels().get(0).getChannelName(), satan.getUserID(), chgroup1.getGroupID());
+		assertEquals(chgroup1.channels.get(0).messageLog.size(),msgs.size());
 	}
 
 }
