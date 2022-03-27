@@ -74,34 +74,55 @@ public class Role
 	public String kickUser(User user)
 	{
 		//check permissions
-		if (canKick)
+		if (this.canKick)
 		{
 			//Call Group removeUser(user)
-			myGroup.removeUser(user);
-			String kickMsg = "User has been kicked.";
-			return kickMsg;
+			myGroup.removeUser(user); 
+			return "User "+user.getUsername()+" has been kicked.";
 		}
 		else
 		{
-			String kickMsg = "You do not have permission to kick users.";
-			return kickMsg;
+			return "You do not have permission to kick users.";
 		}
 	}
 	public String lockChannel(String channelName, Integer userID)
 	{
-		//for every channel
-		for (Channel c : myGroup.channels)
+		if (this.canLockChannel)
 		{
-			//make sure this is correct channel
-			if (c.getChannelName() == channelName)
+			//for every channel
+			for (Channel c : myGroup.channels)
 			{
-				c.setIsLocked(true); 
-				//reset allowed users
-				c.allowedUsers.clear();
-				//only have user that locked channel in allowedList
-				c.getAllowedUsers().add(userID);
-				String lockMsg = "Channel has been locked.";
-				return lockMsg;
+				//check this is the correct channel
+				if (c.getChannelName() == channelName)
+				{
+					c.setIsLocked(true); 
+					//reset allowed users
+					c.allowedUsers.clear();
+					//only have user that locked channel in allowedList
+					c.allowedUsers.add(userID);
+					return "Channel "+c.getChannelName()+" been locked.";
+				}
+			}
+		}
+		return "Channel name not found.";
+	}
+	public String unlockChannel(String channelName, Integer userID)
+	{
+		if (this.canLockChannel)
+		{
+			//for every channel
+			for (Channel c : myGroup.channels)
+			{
+				//check this is the correct channel
+				if (c.getChannelName() == channelName)
+				{
+					c.setIsLocked(false); 
+					//reset allowed users
+					c.allowedUsers.clear();
+					//add all users?
+					//c.allowedUsers = //get all registered userIDs;
+					return "Channel "+c.getChannelName()+" been locked.";
+				}
 			}
 		}
 		return "Channel name not found.";

@@ -79,13 +79,37 @@ class DatabaseTest
 		db.createChannel("testChannel3", satan.getUserID(), chgroup.getGroupID());
 		//channel above should not be created so length of channels in chgroup should not change
 		assertEquals(channelSizeBefore,chgroup.channels.size());
+		
+		//test role can lock channel
+		assertEquals(false,dbchan.getIsLocked());
+		db.getRole(chgroup.getGroupID(), overlord.getUserID()).lockChannel(dbchan.getChannelName(), overlord.getUserID());
+		assertEquals(true,dbchan.getIsLocked());
+		//test unlock channel
+		db.getRole(chgroup.getGroupID(), overlord.getUserID()).unlockChannel(dbchan.getChannelName(), overlord.getUserID());
+		//threat path test for lock channel
+		assertEquals(false,dbchan.getIsLocked());
+		db.getRole(chgroup.getGroupID(), satan.getUserID()).lockChannel(dbchan.getChannelName(), overlord.getUserID());
+		assertEquals(false,dbchan.getIsLocked());
 	}
 
-//	@Test
-//	void testMessageReceived()
-//	{
-//		messageReceived(channelName, msg, userID, groupID);
-//	}
+	@Test
+	void testMessageReceived()
+	{
+		db.createGroup(49, "msgGroup");
+		Group msgGroup = db.getGroups().get(49);
+		msgGroup.registeredUsers.put(overlord,msgGroup.admin);
+		msgGroup.addNewUser(overlord, josh, msgGroup.admin);
+		msgGroup.addNewUser(overlord,satan, msgGroup.admin);
+		db.createChannel("5Chan", overlord.getUserID(), msgGroup.getGroupID());
+		Channel msgChan = msgGroup.getChannels().get(0);
+		//empty channel msglog
+		assertEquals(0,msgChan.getMessageLog().size());
+		db.messageReceived(msgChan.getChannelName(), "Hello World!", overlord.getUserID(), msgGroup.getGroupID());
+		// channel msglog increased
+		assertEquals(1,msgChan.getMessageLog().size());
+		//msg text is the same
+		assertEquals("Hello World!",msgChan.getMessageLog().get(0).getText());
+	}
 
 	@Test
 	void testViewChannel()

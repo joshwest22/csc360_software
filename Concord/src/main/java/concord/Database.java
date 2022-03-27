@@ -66,12 +66,11 @@ public class Database
 			}
 		}
 	}
-	@SuppressWarnings("unlikely-arg-type")
 	public void messageReceived(String channelName, String msg, Integer userID, Integer groupID)
 	{
 		//package message in Message and send to role and then to messageLog
 		Message m = new Message(msg,userID);
-		Role r = groups.get(groupID).getRegisteredUsers().get(userID);
+		Role r = getRole(groupID,userID);
 		for(Channel ch : r.getGroup().channels)
 		{
 			if (ch.channelName.equals(channelName))
@@ -112,10 +111,6 @@ public class Database
 	{
 		users.get(unblockerID).unblockUser(unblockeeID);
 	}
-//	public void lockChannel(String channelName, User user)
-//	{
-//		
-//	}
 	public User getUser(Integer userID)
 	{
 		User user = users.get(userID);
