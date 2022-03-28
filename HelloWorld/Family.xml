@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="17" class="java.beans.XMLDecoder">
+ <object class="hi.Family" id="Family0">
+  <void property="fam">
+   <void method="add">
+    <object class="hi.Person">
+     <void property="age">
+      <int>13</int>
+     </void>
+     <void property="fname">
+      <string>Juliet</string>
+     </void>
+     <void property="lname">
+      <string>Cap</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="hi.Person">
+     <void property="age">
+      <int>54</int>
+     </void>
+     <void property="fname">
+      <string>Count</string>
+     </void>
+     <void property="lname">
+      <string>Dukoo</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="hi.Person">
+     <void property="age">
+      <int>15</int>
+     </void>
+     <void property="fname">
+      <string>Romeo</string>
+     </void>
+     <void property="lname">
+      <string>Mon</string>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="hi.Person">
+     <void property="age">
+      <int>973</int>
+     </void>
+     <void property="fname">
+      <string>Yo</string>
+     </void>
+     <void property="lname">
+      <string>Da</string>
+     </void>
+    </object>
+   </void>
+  </void>
+ </object>
+</java>

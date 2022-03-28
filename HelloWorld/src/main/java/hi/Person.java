@@ -1,5 +1,7 @@
 package hi;
 
+import java.util.Objects;
+
 public class Person
 {
 	String firstName;
@@ -18,7 +20,11 @@ public class Person
 		this.lastName = lname;
 		this.age = age;
 	}
-
+	
+	public Person()
+	{
+		this("John","Doe",27);
+	}
 	@Override
 	public String toString()
 	{
@@ -90,6 +96,27 @@ public class Person
 
 	}
 
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(age, firstName, lastName);
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		return age == other.age && Objects.equals(firstName, other.firstName)
+				&& Objects.equals(lastName, other.lastName);
+	}
+	
+	
 }
 
 
