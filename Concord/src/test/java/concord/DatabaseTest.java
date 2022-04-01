@@ -1,5 +1,6 @@
 package concord;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.MalformedURLException;
@@ -7,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import java.lang.Integer;
 class DatabaseTest
 {
@@ -154,6 +156,15 @@ class DatabaseTest
 		//view channel
 		ArrayList<Message> msgs = db.viewChannel(chgroup1.getChannels().get(0).getChannelName(), satan.getUserID(), chgroup1.getGroupID());
 		assertEquals(chgroup1.channels.get(0).messageLog.size(),msgs.size());
+	}
+	
+	@Test
+	void testXMLStorage()
+	{
+		db.storeToDisk();
+		Database diskF = Database.loadFromDisk();
+		
+		assertTrue(db.equals(diskF));
 	}
 
 }

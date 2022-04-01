@@ -47,6 +47,7 @@ public class Family
 	{
 		this.famList = fam;
 	}
+	
 	public static Family loadFromDisk()
 	{
 		XMLDecoder decoder=null;

@@ -1,25 +1,81 @@
 package concord;
 
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Database
 {
 	HashMap<Integer, Group> groups;
+	//iterable list of users for XML encoding
+	ArrayList<Group> listOfGroups;
+	ArrayList<Integer> listOfGroupIDs;
+		
 	HashMap<Integer, User> users;
+	//iterable list of users for XML encoding
+	ArrayList<User> listOfUsers;
+	ArrayList<Integer> listOfUserIDs;
+	
 	//alternate constructor
 	public Database(HashMap<Integer, Group> groups, HashMap<Integer, User> users)
 	{
 		this.groups = groups;
+		
+		//set userList to every user in users; thanks to GeeksforGeeks for conversion from hash to list
+		Set<Integer> groupsKeySet = groups.keySet();
+		ArrayList<Integer> groupsListOfKeys = new ArrayList<Integer>(groupsKeySet);
+		Collection<Group> groupsValues = groups.values();
+		ArrayList<Group> groupsListOfValues = new ArrayList<>(groupsValues);
+		
+		this.listOfGroups = groupsListOfValues;
+		this.listOfGroupIDs = groupsListOfKeys;
+		
 		this.users = users;
+		
+		//set userList to every user in users; thanks to GeeksforGeeks for conversion from hash to list
+		Set<Integer> keySet = users.keySet();
+		ArrayList<Integer> listOfKeys = new ArrayList<Integer>(keySet);
+		Collection<User> values = users.values();
+		ArrayList<User> listOfValues = new ArrayList<>(values);
+		
+		this.listOfUsers = listOfValues;
+		this.listOfUserIDs = listOfKeys;
 	}
+	
 	public Database()
 	{
 		HashMap<Integer, Group> groups = new HashMap<Integer, Group>();
 		HashMap<Integer, User> users = new HashMap<Integer, User>();
 		this.groups = groups;
+		
+		//set userList to every user in users; thanks to GeeksforGeeks for conversion from hash to list
+		Set<Integer> groupsKeySet = groups.keySet();
+		ArrayList<Integer> groupsListOfKeys = new ArrayList<Integer>(groupsKeySet);
+		Collection<Group> groupsValues = groups.values();
+		ArrayList<Group> groupsListOfValues = new ArrayList<>(groupsValues);
+		
+		this.listOfGroups = groupsListOfValues;
+		this.listOfGroupIDs = groupsListOfKeys;
+		
 		this.users = users;
+		
+		//set userList to every user in users; thanks to GeeksforGeeks for conversion from hash to list
+		Set<Integer> keySet = users.keySet();
+		ArrayList<Integer> listOfKeys = new ArrayList<Integer>(keySet);
+		Collection<User> values = users.values();
+		ArrayList<User> listOfValues = new ArrayList<>(values);
+		
+		this.listOfUsers = listOfValues;
+		this.listOfUserIDs = listOfKeys;		
 	}
 	
 	public HashMap<Integer, Group> getGroups()
@@ -122,4 +178,83 @@ public class Database
 		return role;
 	}
 	
+	/* XML Storage */
+	public void storeToDisk()
+	{
+		XMLEncoder encoder=null;
+		try
+		{
+			encoder=new XMLEncoder(new BufferedOutputStream(new FileOutputStream("ConcordDatabase.xml")));
+		}
+		catch(FileNotFoundException fileNotFound)
+		{
+			System.out.println("ERROR: While Creating or Opening the File dvd.xml");
+		}
+		encoder.writeObject(this);
+		encoder.close();
+	}
+	
+	public static Database loadFromDisk()
+	{
+		XMLDecoder decoder=null;
+		try {
+			decoder=new XMLDecoder(new BufferedInputStream(new FileInputStream("ConcordDatabase.xml")));
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR: File dvd.xml not found");
+		}
+		Database f = (Database) decoder.readObject();
+		return f;
+	}
+	
+	public boolean equals(Database that)
+	{
+		if (users.size() != that.users.size())
+		{
+			return false;
+		}
+		for (User u : listOfUsers) 
+		{
+			if (!that.contains(u))
+			{
+				return false;
+			}
+		}
+		
+		if (groups.size() != that.groups.size())
+		{
+			return false;
+		}
+		for (Group g : listOfGroups)
+		{
+			if (!that.contains(g))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean contains(User member)
+	{
+		for (User u: listOfUsers)
+		{
+			if (u.equals(member))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean contains(Group group)
+	{
+		for (Group g: listOfGroups)
+		{
+			if (g.equals(group))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
