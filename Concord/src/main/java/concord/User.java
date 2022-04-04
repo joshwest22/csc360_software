@@ -46,7 +46,7 @@ public class User
 		URL defualtUserPic = null;
 		try
 		{
-			defualtUserPic = new URL("concordLogo.png"); //url might be wrong
+			defualtUserPic = new URL("http://concordLogo.png"); //url might be wrong
 		} 
 			catch (MalformedURLException e)
 		{
@@ -60,6 +60,11 @@ public class User
 		this.pendingInvites = new ArrayList<Invitation>();
 	}
 	
+	public User()
+	{
+		this("username", "realname", "password");
+	}
+
 	public String getUsername()
 	{
 		return username;

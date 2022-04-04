@@ -211,7 +211,7 @@ public class Database
 		{
 			System.out.println("ERROR: While Creating or Opening the File dvd.xml");
 		}
-		encoder.writeObject(this);
+		encoder.writeObject(users);//sub this/users/groups for one thing in file at a time
 		encoder.close();
 	}
 	
