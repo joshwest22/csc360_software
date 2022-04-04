@@ -12,7 +12,6 @@ public class Role
 	public Role(String roleName, Group group, Boolean canKick, Boolean canLockChannel, Boolean canAssignRole,
 			Boolean canCreateChannel)
 	{
-		super();
 		this.roleName = roleName;
 		this.myGroup = group;
 		this.canKick = canKick;
@@ -168,6 +167,17 @@ public class Role
 			return "Channel creation failed. "+this.getRoleName()+" does not have permission to create channels.";
 		}
 		
+	}
+	
+	public Role createRole(Integer creatorID, String roleName, Group group,  Boolean canKick,
+			Boolean canLockChannel, Boolean canAssignRole, Boolean canCreateChannel)
+	{
+		if(this.canAssignRole)
+		{
+			Role newRole = new Role(roleName, group, canKick, canLockChannel, canAssignRole, canCreateChannel);
+			return newRole;
+		}
+		return null;
 	}
 	//Might need a view channel
 }

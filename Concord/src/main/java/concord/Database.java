@@ -7,6 +7,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,6 +102,12 @@ public class Database
 		User user = new User(username,realname,password,userID,userPic,userBio,onlineStatus);
 		users.put(userID, user);
 	}
+	public void createUser(String username, String realname, String password) throws MalformedURLException
+	{
+		//create User and add to users HashMap
+		User user = new User(username,realname,password);
+		users.put(user.getUserID(), user);
+	}
 	public void createGroup(Integer groupID, String groupName)
 	{
 		Group group = new Group(groupID, groupName);
@@ -176,6 +183,20 @@ public class Database
 	{
 		Role role = groups.get(groupID).getRegisteredUsers().get(users.get(userID));
 		return role;
+	}
+	public void lockChannel(Integer groupID, Integer userID, String channelName)
+	{
+		for (int i = 0; i<this.getGroups().get(groupID).getChannels().size();i++)
+		{
+			this.getGroups().get(groupID).getChannels().get(i).lockChannel(channelName, userID);
+		}
+	}
+	public void unlockChannel(Integer groupID, Integer userID, String channelName)
+	{
+		for (int i = 0; i<this.getGroups().get(groupID).getChannels().size();i++)
+		{
+			this.getGroups().get(groupID).getChannels().get(i).unlockChannel(channelName, userID);
+		}
 	}
 	
 	/* XML Storage */
@@ -256,5 +277,12 @@ public class Database
 			}
 		}
 		return false;
+	}
+
+	public Group getGroup(Integer groupID)
+	{
+		Group group = groups.get(groupID);
+		return group;
+		
 	}
 }

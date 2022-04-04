@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 class ClientTest
 {
 	
-	Server server; //should this be data
+	Server server;
 	
 	@BeforeEach
 	void setUp() throws Exception
@@ -40,7 +40,7 @@ class ClientTest
 			Client client = new Client();
 			observed = (RMIObserved) Naming.lookup("rmi://127.0.0.1/SERVER");
 			observed.addObserver(client);
-			client.name = "Tony";
+			client.clientName = "Tony";
 			
 			server.makeDonuts();
 		} catch (MalformedURLException | RemoteException | NotBoundException e)

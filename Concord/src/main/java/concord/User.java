@@ -1,10 +1,14 @@
 package concord;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class User
 {
+	private static final int MAX = 999999;
+	private static final int MIN = 0;
 	private String username;
 	private String realname;
 	private String password;
@@ -12,7 +16,8 @@ public class User
 	private URL userPic;
 	private String userBio;
 	private Boolean onlineStatus;
-	private ArrayList<Integer> blockedUserIDs = new ArrayList<Integer>();
+	private ArrayList<Integer> blockedUserIDs; 
+	private ArrayList<Invitation> pendingInvites;
 	
 	public User(String username, String realname, String password, Integer userID, URL userPic, String userBio,
 			Boolean onlineStatus)
@@ -25,6 +30,34 @@ public class User
 		this.userBio = userBio;
 		this.onlineStatus = onlineStatus;
 		this.blockedUserIDs = new ArrayList<Integer>();
+		this.pendingInvites = new ArrayList<Invitation>();
+	}
+	
+	public User(String username, String realname, String password)
+	{
+		
+		this.username = username;
+		this.realname = realname;
+		this.password = password;
+		Random rn = new Random();
+		int range = MAX - MIN + 1;
+		Integer generatedID = rn.nextInt(range) + MIN; 
+		this.userID = generatedID;
+		URL defualtUserPic = null;
+		try
+		{
+			defualtUserPic = new URL("concordLogo.png"); //url might be wrong
+		} 
+			catch (MalformedURLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		this.userPic = defualtUserPic ;
+		this.userBio = "No bio";
+		this.onlineStatus = false;
+		this.blockedUserIDs = new ArrayList<Integer>();
+		this.pendingInvites = new ArrayList<Invitation>();
 	}
 	
 	public String getUsername()
@@ -91,6 +124,16 @@ public class User
 	{
 		this.blockedUserIDs = blockedUsers;
 	}
+	public ArrayList<Invitation> getPendingInvites()
+	{
+		return pendingInvites;
+	}
+
+	public void setPendingInvites(ArrayList<Invitation> pendingInvites)
+	{
+		this.pendingInvites = pendingInvites;
+	}
+
 	public void blockUser(Integer blockeeID)
 	{
 		blockedUserIDs.add(blockeeID);

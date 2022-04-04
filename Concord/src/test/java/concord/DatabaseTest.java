@@ -92,6 +92,12 @@ class DatabaseTest
 		assertEquals(false,dbchan.getIsLocked());
 		db.getRole(chgroup.getGroupID(), satan.getUserID()).lockChannel(dbchan.getChannelName(), overlord.getUserID());
 		assertEquals(false,dbchan.getIsLocked());
+		//test db lock channel (uses methods above, but necessary for server)
+		db.lockChannel(chgroup.getGroupID(), overlord.getUserID(), dbchan.getChannelName());
+		assertEquals(true,dbchan.getIsLocked());
+		//test db unlock channel
+		db.unlockChannel(chgroup.getGroupID(), overlord.getUserID(), dbchan.getChannelName());
+		assertEquals(false,dbchan.getIsLocked());
 	}
 
 	@Test
@@ -119,6 +125,8 @@ class DatabaseTest
 		//make new group
 		db.createGroup(48, "testCreateChannelGroup1");
 		Group chgroup1 = db.getGroups().get(48);
+		//test getGroup
+		assertEquals("testCreateChannelGroup1",db.getGroup(chgroup1.getGroupID()).getGroupName());
 		chgroup1.registeredUsers.put(overlord,chgroup1.admin);
 		chgroup1.addNewUser(overlord, josh, chgroup1.admin);
 		chgroup1.addNewUser(overlord,satan, chgroup1.admin);

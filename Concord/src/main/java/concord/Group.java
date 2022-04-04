@@ -144,4 +144,16 @@ public class Group
 		return registeredUsers;
 	}
 	//add getUser method
+	
+	public Channel getChannelByName(String channelName)
+	{
+		for(Channel channel : this.channels)
+		{
+			if(channel.getChannelName().equals(channelName))
+			{
+				return channel;
+			}
+		}
+		return null;
+	}
 }

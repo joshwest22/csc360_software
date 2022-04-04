@@ -102,6 +102,32 @@ public class Channel
 		}
 		
 	}
+
+	public void unlockChannel(String channelName2, Integer userID)
+	{
+		if (this.getChannelName() == channelName)
+		{
+			setIsLocked(false);
+			//reset allowedUsers list; not necessary, but ensures cleanliness
+			allowedUsers.clear();			 
+		}
+		
+	}
+
+	public void addAllowedUser(User adder, Integer addee)
+	{
+		//adds user to allowedUsers for channel
+		//check permission to do things in private channel
+		if (myGroup.getRegisteredUsers().get(adder).getCanLockChannel()) //how do I get user from userID in group
+		{
+			//check whether user is in the channel they are adding someone to
+			if (allowedUsers.contains(adder.getUserID()))
+			{
+				allowedUsers.add(addee);
+			}
+		}
+		
+	}
 }
 
 
